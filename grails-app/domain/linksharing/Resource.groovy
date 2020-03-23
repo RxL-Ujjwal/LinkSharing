@@ -7,6 +7,7 @@ class Resource {
     Date dateCreated
     Date lastUpdated
 
+
     static hasMany = [readingitem:ReadingItem,resourcerating:ResourceRating]
     static mapping = {
         table name:"Rsr"
