@@ -1,0 +1,93 @@
+h1{
+    margin: 30px 50px 5px 70px;
+    padding: 10px;
+}
+.mynav{
+    margin: 10px 80px 15px 80px;
+    padding: 3px;
+    border: 1px solid black;
+}
+.ls{
+    font-size: 20px;
+    margin-left: 5px;
+}
+/* Recent Shares */
+.r1c1{
+    margin: 5px 1.5rem 5px 65px;
+    padding: 15px;
+    border: 1px solid black;
+    height: 250px;
+    width: 550px;
+}
+/* Login */
+.r1c2{
+    margin: 5px 20px 5px 2rem;
+    padding: 15px;
+    border: 1px solid black;
+    height: 220px;
+    width: 400px;
+}
+/* Top posts */
+.r2c1{
+    margin: 10px 1.5rem 5px 65px;
+    padding: 15px;
+    border: 1px solid black;
+    height: 150px;
+    width: 550px;
+}
+/* Register */
+.r2c2{
+    margin: 0px 20px 5px 2rem;
+    padding: 15px;
+    border: 1px solid black;
+    height: 500px;
+    width: 300px;
+}
+.mynavl{
+    padding: 0px;
+    margin-top: -15px;
+    margin-left: -15px;
+    margin-right: -15px;
+    border-bottom: 1px solid black;
+}
+.fp{
+    font-size: 15px;
+    margin-left: 20px;
+    margin-top: 15px;
+
+}
+.e{
+    font-size: 15px;
+    margin-right: 5px;
+}
+.p{
+    font-size: 15px;
+    margin-right: 50px;
+}
+.sub{
+    float: right;
+    margin-right: 20px;
+}
+.topic{
+    margin: 5px 1.5rem 0px 65px;
+    padding: 15px;
+    border: 1px solid black;
+    height: 170px;
+}
+.posts{
+    margin: 5px 1.5rem 5px 65px;
+    padding: 15px;
+    border: 1px solid black;
+    height: 250px;
+}
+.txt{
+    margin: 25px 0px 0px 7px;
+    text-align: justify;
+    font-size: 13px;
+}
+.users{
+    margin: -65px 1.5rem 0px 65px;
+    padding: 15px;
+    border: 1px solid black;
+    height: 158px;
+}
