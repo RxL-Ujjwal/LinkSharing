@@ -7,15 +7,22 @@ class TopicController {
 
     TopicService topicService
 
-    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"  ]
+    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
-    def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        respond topicService.list(params), model:[topicCount: topicService.count()]
-    }
-    static defaultAction = "myAction"
-    def myAction(){
-        render(view: "topic")
+    def index() {
+        Topic topic = Topic.findByName(params.name)
+        Users user = Users.findByEmail(session.getAttribute("email"))
+        if(topic!=null){
+            if(topic.createdBy==user){
+                flash.message = "Already Created"
+                redirect(controller:"user",action: "dashboard")
+            }
+        }else{
+            Topic t = new Topic(name: params.name,visibility: params.visibility,createdBy: user)
+            t.save(flush:true,failOnError:true)
+            flash.message = "Topic Created"
+            redirect(controller:"user",action: "dashboard")
+        }
     }
 
     def show(Long id) {
@@ -41,7 +48,7 @@ class TopicController {
 
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'topic.label', default: 'linksharing.Topic'), topic.id])
+                flash.message = message(code: 'default.created.message', args: [message(code: 'topic.label', default: 'Topic'), topic.id])
                 redirect topic
             }
             '*' { respond topic, [status: CREATED] }
@@ -67,7 +74,7 @@ class TopicController {
 
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.updated.message', args: [message(code: 'topic.label', default: 'linksharing.Topic'), topic.id])
+                flash.message = message(code: 'default.updated.message', args: [message(code: 'topic.label', default: 'Topic'), topic.id])
                 redirect topic
             }
             '*'{ respond topic, [status: OK] }
@@ -84,7 +91,7 @@ class TopicController {
 
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'topic.label', default: 'linksharing.Topic'), id])
+                flash.message = message(code: 'default.deleted.message', args: [message(code: 'topic.label', default: 'Topic'), id])
                 redirect action:"index", method:"GET"
             }
             '*'{ render status: NO_CONTENT }
@@ -94,7 +101,7 @@ class TopicController {
     protected void notFound() {
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.not.found.message', args: [message(code: 'topic.label', default: 'linksharing.Topic'), params.id])
+                flash.message = message(code: 'default.not.found.message', args: [message(code: 'topic.label', default: 'Topic'), params.id])
                 redirect action: "index", method: "GET"
             }
             '*'{ render status: NOT_FOUND }

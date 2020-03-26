@@ -1,6 +1,6 @@
 package linksharing
 
-class User {
+class Users {
     String email
     String username
     String password

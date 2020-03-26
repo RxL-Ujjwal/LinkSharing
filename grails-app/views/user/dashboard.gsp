@@ -16,11 +16,21 @@
 <h1>Dashboard</h1>
 %{--<g:set var="firstname" value="session.getAttribute('firstname')" scope="session"></g:set>--}%
 %{--<g:set var="lastname" value="session.getAttribute('lastname')" scope="session"></g:set>--}%
+<g:if test="${flash.message}">
+    <div class="panel">
+        <div class="panel-body bg-info text-center">
+            ${flash.message}
+        </div>
+    </div>
+</g:if>
 
 <nav class="navbar navbar-expand-sm bg-light rounded mynav">
     <ul class="navbar-nav">
         <li class="nav-item">
             <a class="nav-link" href="#"><u class="ls">Link Sharing</u></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="${createLink(controller : "User")}" style="margin: 5px 5px 0px 850px;font-size: 18px;padding: 5px;"><u>Logout</u></a>
         </li>
     </ul>
 </nav>
@@ -30,7 +40,7 @@
         <div>
             <div class="row">
                 <div class="column">
-                    <asset:image src="xyz.jpg" alt="Myphoto" height="100px" width="90px" style="margin: 0px 10px 10px 10px;"/>
+                    <asset:image src="data:image/*;base64,${session.getAttribute("photo")}" alt="Myphoto" height="100px" width="90px" style="margin: 0px 10px 10px 10px;"/>
                 </div>
                 <div class="column">
                     <label style="font-size: 25px;margin: 0px 5px 0px 5px;"><b>${session.getAttribute('firstname')} ${session.getAttribute('lastname')}</b></label><br>
@@ -61,7 +71,7 @@
                     <div style="height: 50px;width: 450px;">
                         <label style="font-size: 14px;margin: 12px 10px 0px 10px;"><b>${session.getAttribute('firstname')} ${session.getAttribute('lastname')}</b></label>
                         <label style="font-size: 14px;color: gray;margin: 12px 75px 0px 5px;">@uday</label>
-                        <label style="font-size: 12px;margin: 12px 0px 0px 120px;"><a href="topicshow.html">Grails</a></label>
+                        <label style="font-size: 12px;margin: 12px 0px 0px 120px;"><a href="/topic">Grails</a></label>
                         <p class="txt" style="margin-top: 0px;"> Asset Pipeline uses a Class type called AssetFile.
                         These AssetFiles are included into the AssetHelper.assetSpecs static array.
                         That's how it works.
@@ -94,7 +104,7 @@
                     <asset:image src="xyz.jpg" alt="Myphoto" height="70px" width="60px" style="margin: 10px 10px 10px 10px;"/>
                 </div>
                 <div class="column">
-                    <label style="font-size: 14px;margin: 10px 10px 5px 5px;color: gray;"><a href="topicshow.html" style="margin-right: 5px;"><u>Grails</u></a></label>
+                    <label style="font-size: 14px;margin: 10px 10px 5px 5px;color: gray;"><a href="/topic" style="margin-right: 5px;"><u>Grails</u></a></label>
                     <br>
                     <label style="font-size: 14px;margin: 0px 30px 5px 5px;color: gray;">@rcthomas</label>
                     <label style="font-size: 14px;margin: 0px 10px 5px 40px;color: gray;">Subscriptions</label>
@@ -203,7 +213,7 @@
                         <label style="margin-right: 25px;">Document</label>
                         <input type="file" name="document" id="doc"><br>
                         <label style="margin-right: 15px;">Description</label>
-                        <input type="text" name="descript" id="des"><br>
+                        <input type="textarea" name="descript" id="des"><br>
                         <label style="margin-right: 60px;">Topic</label>
                         <select id="topic" name="topic">
                             <option value="topic1">Topic1</option>
@@ -271,18 +281,21 @@
                         </button>
                     </div>
                     <div class="modal-body">
+                        <g:form controller="topic" action="index">
                         <label style="margin-right: 55px;">Name</label>
                         <input type="name" name="name" id="name"><br>
 
                         <label style="margin-right: 40px;">Visibility</label>
-                        <select id="vis" name="vis">
-                            <option value="public">Public</option>
-                            <option value="private">Private</option>
+                        <select id="vis" name="visibility">
+                            <option value="Public">Public</option>
+                            <option value="Private">Private</option>
+                        </select><br>
 
-                        </select>
+                            <label style="margin-right: 45px;">Submit</label>
+                            <input type="Submit" value="Create">
+                        </g:form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary">Invite</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
 
                     </div>

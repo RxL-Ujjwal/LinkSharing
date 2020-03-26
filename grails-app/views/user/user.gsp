@@ -101,7 +101,7 @@
                           </li>
                         </ul>
                       </nav><br>
-                      <g:form name="loginform" url="[action:'login',controller:'User']">
+                      <g:form name="loginform" url="[action:'login',controller:'user']">
                       <label class="e">Email/Username </label>
                       <input type="text" name="logemail" ><br><br>
                       <label class="p">Password </label>
