@@ -19,6 +19,7 @@ class TopicController {
             }
         }else{
             Topic t = new Topic(name: params.name,visibility: params.visibility,createdBy: user)
+
             t.save(flush:true,failOnError:true)
             flash.message = "Topic Created"
             redirect(controller:"user",action: "dashboard")

@@ -10,6 +10,7 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <asset:javascript src="myscript.js"></asset:javascript>
 </head>
 
 <body>
@@ -30,7 +31,22 @@
             <a class="nav-link" href="#"><u class="ls">Link Sharing</u></a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="${createLink(controller : "User")}" style="margin: 5px 5px 0px 850px;font-size: 18px;padding: 5px;"><u>Logout</u></a>
+            <img style="margin-top:5px;width: 40px;height: 40px;margin-left: 800px";
+                 src="data:image/jpg;base64,${session.getAttribute("photo")}"/>
+        </li>
+        <li class="nav-item">
+            <div class="dropdown" style="margin: 5px 5px 0px 5px;">
+                <button class="btn btn-light dropdown-toggle" type="button" data-toggle="dropdown">${session.getAttribute("firstname")}
+                    <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li><a href="#">Profile</a></li>
+                    <li><a href="#">Users</a></li>
+                    <li><a href="#">Topics</a></li>
+                    <li><a href="#">Posts</a></li><hr>
+                    <li class="divider"></li>
+                    <li><a href="${createLink(controller : "User")}">Logout</a></li>
+                </ul>
+            </div>
         </li>
     </ul>
 </nav>
@@ -40,11 +56,15 @@
         <div>
             <div class="row">
                 <div class="column">
-                    <asset:image src="data:image/*;base64,${session.getAttribute("photo")}" alt="Myphoto" height="100px" width="90px" style="margin: 0px 10px 10px 10px;"/>
+%{--                    <img src="data:image/*;base64,${session.getAttribute("photo")}" alt="Myphoto" height="100px" width="90px" style="margin: 0px 10px 10px 10px;"/>--}%
+                    <img style="width: 90px;height: 100px;margin-left: 10px"
+                         src="data:image/jpg;base64,${session.getAttribute("photo")}"/>
+
+                    %{--                        <asset:image src="xyz.jpg" alt="Myphoto" height="100px" width="90px" style="margin: 0px 10px 10px 10px;"/>--}%
                 </div>
                 <div class="column">
                     <label style="font-size: 25px;margin: 0px 5px 0px 5px;"><b>${session.getAttribute('firstname')} ${session.getAttribute('lastname')}</b></label><br>
-                    <label style="font-size: 14px;color: gray;margin: 0px 5px 0px 10px;">@uday</label><br>
+                    <label style="font-size: 14px;color: gray;margin: 0px 5px 0px 10px;">@${session.getAttribute('username')}</label><br>
                     <label style="font-size: 14px;color: gray;margin: 0px 10px 0px 10px;">Subscriptions</label>
                     <label style="font-size: 14px;color: gray;margin: 0px 10px 0px 10px;">Topics</label><br>
                     <label style="font-size: 14px;margin: 0px 30px 0px 35px;color:blue;">50</label>
@@ -53,6 +73,7 @@
             </div>
         </div>
     </div>
+
 
     <div class="col-md-5 rounded-top posts" style="height: 150px;margin-left: 15px;">
         <div>
@@ -65,12 +86,14 @@
             </nav>
             <div class="row">
                 <div class="column">
-                    <asset:image src="xyz.jpg" alt="Myphoto" height="80px" width="80px" style="margin: 10px 5px 10px 10px;"/>
+%{--                    <asset:image src="xyz.jpg" alt="Myphoto" height="80px" width="80px" style="margin: 10px 5px 10px 10px;"/>--}%
+                        <img style="margin-top:5px;width: 90px;height: 100px;margin-left: 10px";
+                         src="data:image/jpg;base64,${session.getAttribute("photo")}"/>
                 </div>
                 <div class="column">
                     <div style="height: 50px;width: 450px;">
                         <label style="font-size: 14px;margin: 12px 10px 0px 10px;"><b>${session.getAttribute('firstname')} ${session.getAttribute('lastname')}</b></label>
-                        <label style="font-size: 14px;color: gray;margin: 12px 75px 0px 5px;">@uday</label>
+                        <label style="font-size: 14px;color: gray;margin: 12px 75px 0px 5px;">@${session.getAttribute('username')}</label>
                         <label style="font-size: 12px;margin: 12px 0px 0px 120px;"><a href="/topic">Grails</a></label>
                         <p class="txt" style="margin-top: 0px;"> Asset Pipeline uses a Class type called AssetFile.
                         These AssetFiles are included into the AssetHelper.assetSpecs static array.
@@ -89,7 +112,7 @@
         </div>
     </div>
 
-    <div class="col-md-4 rounded-top topic" style="margin-left: 100px;">
+    <div class="col-md-4 rounded-top topic" style="margin-left: 100px;margin-top: -10px">
         <div>
             <nav class="navbar navbar-expand-sm bg-secondary mynavl">
                 <ul class="navbar-nav">
@@ -101,7 +124,10 @@
             </nav>
             <div class="row">
                 <div class="column">
-                    <asset:image src="xyz.jpg" alt="Myphoto" height="70px" width="60px" style="margin: 10px 10px 10px 10px;"/>
+%{--                    <asset:image src="xyz.jpg" alt="Myphoto" height="70px" width="60px" style="margin: 10px 10px 10px 10px;"/>
+--}%
+                    <img style="margin-top:5px;width: 90px;height: 100px;margin-left: 10px"
+                         src="data:image/jpg;base64,${session.getAttribute("photo")}"/>
                 </div>
                 <div class="column">
                     <label style="font-size: 14px;margin: 10px 10px 5px 5px;color: gray;"><a href="/topic" style="margin-right: 5px;"><u>Grails</u></a></label>
@@ -121,12 +147,14 @@
         <div>
             <div class="row">
                 <div class="column">
-                    <asset:image src="xyz.jpg" alt="Myphoto" height="80px" width="80px" style="margin: 0px 5px 10px 10px;"/>
+%{--                    <asset:image src="xyz.jpg" alt="Myphoto" height="80px" width="80px" style="margin: 0px 5px 10px 10px;"/>--}%
+                    <img style="margin-top:5px;width: 90px;height: 100px;margin-left: 10px"
+                         src="data:image/jpg;base64,${session.getAttribute("photo")}"/>
                 </div>
                 <div class="column">
                     <div style="height: 50px;width: 450px;margin-top: 0px;">
                         <label style="font-size: 14px;margin: 12px 10px 0px 10px;"><b>${session.getAttribute('firstname')} ${session.getAttribute('lastname')}</b></label>
-                        <label style="font-size: 14px;color: gray;margin: 12px 75px 0px 5px;">@uday</label>
+                        <label style="font-size: 14px;color: gray;margin: 12px 75px 0px 5px;">@${session.getAttribute('username')}</label>
                         <label style="font-size: 12px;margin: 12px 0px 0px 120px;"><a href="/topic">Grails</a></label>
                         <p class="txt" style="margin-top: 0px;"> Asset Pipeline uses a Class type called AssetFile.
                         These AssetFiles are included into the AssetHelper.assetSpecs static array.
@@ -150,7 +178,9 @@
         <div>
             <div class="row">
                 <div class="column">
-                    <asset:image src="xyz.jpg" alt="Myphoto" height="70px" width="60px" style="margin: 0px 10px 10px 10px;"/>
+%{--                    <asset:image src="xyz.jpg" alt="Myphoto" height="70px" width="60px" style="margin: 0px 10px 10px 10px;"/>--}%
+                    <img style="margin-top:5px;width: 90px;height: 100px;margin-left: 10px"
+                         src="data:image/jpg;base64,${session.getAttribute("photo")}"/>
                 </div>
                 <div class="column">
 
@@ -174,20 +204,27 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <label style="margin-right: 65px;">Link</label>
-                        <input type="text" name="link" id="li"><br>
-                        <label style="margin-right: 15px;">Description</label>
-                        <input type="text" name="descript" id="des"><br>
-                        <label style="margin-right: 60px;">Topic</label>
-                        <select id="topic" name="topic">
-                            <option value="topic1">Topic1</option>
-                            <option value="topic2">Topic2</option>
-                            <option value="topic3">Topic3</option>
-                            <option value="topic4">Topic4</option>
-                        </select>
+                        <g:form controller="resource" action="shareLink">
+                            <label style="margin-right: 65px;">Link</label>
+                            <input type="text" name="link" id="li"><br>
+                            <label style="margin-right: 15px;">Description</label>
+                            <g:textArea name="descriptl" id="desl" placeholder="Description"></g:textArea><br>
+                            <label style="margin-right: 60px;">Topic</label>
+
+                            <g:select name="linkTopic" from="${linksharing.Topic.list().name}" id="inputTopic"/>
+%{--                            <g:if test="${Topic.list()}">--}%
+%{--                            <g:select name="linkTopic" from="${Topic.list().name}"--}%
+%{--                                      id="inputTopic"/>--}%
+%{--                            </g:if>--}%
+%{--                            <g:else>--}%
+%{--                                <b><g:message code="dashboard.createtopic.topic"></g:message></b>--}%
+%{--                            </g:else>--}%
+
+                            <input type="Submit" value="Share">
+                        </g:form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary">Share</button>
+%{--                        <button type="button" class="btn btn-primary">Share</button>--}%
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
 
                     </div>
@@ -200,30 +237,32 @@
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#example">
             Share Document
         </button>
-        <div class="modal fade" id="example" tabindex="-1" role="dialog" aria-labelledby="exampleModal" aria-hidden="true">
+        <div class="modal fade" id="example" tabindex="-1" role="dialog" aria-labelledby="exampleModa" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModal">Share Document</h5>
+                        <h5 class="modal-title" id="exampleModa">Share Document</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
+
                     <div class="modal-body">
-                        <label style="margin-right: 25px;">Document</label>
-                        <input type="file" name="document" id="doc"><br>
-                        <label style="margin-right: 15px;">Description</label>
-                        <input type="textarea" name="descript" id="des"><br>
-                        <label style="margin-right: 60px;">Topic</label>
-                        <select id="topic" name="topic">
-                            <option value="topic1">Topic1</option>
-                            <option value="topic2">Topic2</option>
-                            <option value="topic3">Topic3</option>
-                            <option value="topic4">Topic4</option>
-                        </select>
+                        <g:uploadForm controller="resource" action="shareDoc">
+                            <label style="margin-right: 25px;">Document</label>
+                            <input type="file" name="document" id="doc"><br>
+                            <label style="margin-right: 15px;margin-top: 0px">Description</label>
+    %{--                        input type="text" name="descript" id="des"><br>--}%
+                            <g:textArea name="descriptd" id="desd" placeholder="Description"></g:textArea><br>
+                            <label style="margin-right: 60px;">Topic</label>
+                            <g:select name="docTopic" from="${linksharing.Topic.list().name}" id="topicd"/>
+
+%{--                            <g:select name="docum" from="${Topic.list()}" id="tl"></g:select>--}%
+                            <input type="Submit" value="Share">
+                        </g:uploadForm>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary">Share</button>
+%{--                        <button type="button" class="btn btn-primary">Share</button>--}%
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
 
                     </div>
@@ -246,19 +285,19 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <label style="margin-right: 55px;">Email</label>
-                        <input type="email" name="email" id="email"><br>
-
-                        <label style="margin-right: 60px;">Topic</label>
-                        <select id="topic" name="topic">
-                            <option value="topic1">Topic1</option>
-                            <option value="topic2">Topic2</option>
-                            <option value="topic3">Topic3</option>
-                            <option value="topic4">Topic4</option>
-                        </select>
+                        <g:form controller="emailSender" action="send">
+                            <label style="margin-right: 55px;">Email</label>
+                            <input type="email" name="address" id="email"><br>
+                            <label style="margin-right: 45px;">Subject</label>
+                            <input type="text" name="subject" id="sub"><br>
+                            <label style="margin-right: 55px;">Body</label>
+                            <g:textArea name="body" id="body" placeholder="Body"></g:textArea><br>
+%{--                            <g:select name="emailTopic" from="${linksharing.Topic.list().name}" id="topice"/><br>--}%
+                            <input type="Submit" value="Invite">
+                        </g:form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary">Invite</button>
+%{--                        <button type="button" class="btn btn-primary">Invite</button>--}%
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
 
                     </div>
@@ -290,9 +329,7 @@
                             <option value="Public">Public</option>
                             <option value="Private">Private</option>
                         </select><br>
-
-                            <label style="margin-right: 45px;">Submit</label>
-                            <input type="Submit" value="Create">
+                            <input type="Submit" value="Create" id="ctopic">
                         </g:form>
                     </div>
                     <div class="modal-footer">

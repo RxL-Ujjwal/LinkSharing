@@ -9,8 +9,7 @@ class UserService {
 
     //Register User in the Database
     def registerUser(params) {
-        println("**********")
-        println(params.rphoto)
+
         Users usr = new Users(email: params.remail, username: params.runame, password: params.rpassword, firstName: params.rfname, lastName: params.rlname, admin: false, active: false, photo: params.rphoto.bytes)
         usr.save(flush: true, failOnError: true)
         return usr

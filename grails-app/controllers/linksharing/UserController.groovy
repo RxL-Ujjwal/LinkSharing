@@ -1,5 +1,7 @@
 package linksharing
 
+import grails.converters.JSON
+
 import javax.servlet.http.HttpSession
 
 class UserController {
@@ -16,12 +18,18 @@ class UserController {
     def dashboard(){
         render(view: "dashboard")
     }
+
+    def temp() {
+        Users.first() as JSON
+    }
+
     def login(){
         Users val = userService.loginUser(params)
         if(val!=null) {
             HttpSession session = request.getSession();
             session.setAttribute("firstname",val.firstName)
             session.setAttribute("lastname",val.lastName)
+            session.setAttribute("username",val.username)
             session.setAttribute("email",val.email)
 
             if(val.photo!=null) {
