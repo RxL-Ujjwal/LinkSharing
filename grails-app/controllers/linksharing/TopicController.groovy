@@ -1,5 +1,6 @@
 package linksharing
 
+import grails.converters.JSON
 import grails.validation.ValidationException
 import static org.springframework.http.HttpStatus.*
 
@@ -8,22 +9,29 @@ class TopicController {
     TopicService topicService
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
+    def index(){}
 
-    def index() {
+    def createTopic() {
+        println params
         Topic topic = Topic.findByName(params.name)
         Users user = Users.findByEmail(session.getAttribute("email"))
-        if(topic!=null){
-            if(topic.createdBy==user){
-                flash.message = "Already Created"
-                redirect(controller:"user",action: "dashboard")
-            }
-        }else{
-            Topic t = new Topic(name: params.name,visibility: params.visibility,createdBy: user)
-
-            t.save(flush:true,failOnError:true)
-            flash.message = "Topic Created"
-            redirect(controller:"user",action: "dashboard")
+        if(topic!=null && topic.createdBy==user){
+            render ([success: false] as JSON)
+        } else {
+                Topic t = new Topic(name: params.name, visibility: params.visibility, createdBy: user)
+                Subscription sub = new Subscription(topic: t,user:user,seriousness: Subscription.Seriousness.VerySerious.name())
+                t.addToSubscriptions(sub)
+                t.save(flush: true, failOnError: true)
         }
+        render ([success:true] as JSON)
+        }
+    def topicPage(){
+        println(params.topicId)
+        Topic topic = Topic.get(params.topicId)
+        List list = Users.createCriteria().list{
+            inList("topics",topic)
+        }
+        render(view: "topic",model:[listOfUsers:list])
     }
 
     def show(Long id) {

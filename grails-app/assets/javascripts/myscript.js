@@ -1,10 +1,13 @@
-var createTopic = function(){
+var create = function(){
     $.ajax({
-        url:"/topic/index",
+        url:"/topic/createTopic",
         type: "POST",
         data: {"name":$("#name").val(),"visibility":$("#vis").val()},
-        success : function() {
-            alert("Topic Created")
+        success : function(data) {
+            if(data.success==true)
+                alert("Topic Created")
+            else
+                alert("Topic Existed")
         },
         error : function() {
             alert("Topic creation failed")
@@ -14,6 +17,11 @@ var createTopic = function(){
 
 $(document).ready(function(){
     $("#ctopic").click(function(){
-        createTopic();
+        create();
     });
+    $("#cpass").blur(function(){
+        if($(this).val()!=$("#pass").val())
+            alert("Password Mismatch.");
+        });
   });
+

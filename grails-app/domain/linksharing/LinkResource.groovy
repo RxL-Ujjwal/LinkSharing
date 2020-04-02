@@ -1,12 +1,5 @@
 package linksharing
 
-class LinkResource{
+class LinkResource extends Resource{
     String url
-    String description
-    Date dateCreated
-    Date lastUpdated
-    static mapping = {
-
-    }
-    static belongsTo = [resources:Resource]
 }

@@ -9,9 +9,40 @@ class SubscriptionController {
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
-    def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        respond subscriptionService.list(params), model:[subscriptionCount: subscriptionService.count()]
+    def index() { }
+
+    static defaultAction = "subscribedTopicList"
+    def subscribedTopicList(){
+        Users usr = Users.findByEmail(session.getAttribute("email"))
+        List list = Subscription.createCriteria().list {
+            and {
+                inList("user", usr)
+                order("dateCreated", "desc")
+            }
+        }
+        render(view: "/user/dashboard",model:[subscribedTopics:list])
+    }
+    def subscribe(){
+        Users usr = Users.findByEmail(params.email)
+        Topic topic = Topic.findByCreatedByAndName(usr,params.topicname)
+        Subscription sub = new Subscription(Topic:topic,Users:usr,Seriousness:params.seriousness)
+        topic.addToSubscriptions(sub)
+        topic.save(failOnError:true,flush:true)
+        flash.message="You have subscribed the topic ${sub.topic}"
+        redirect(controller:"user",action: "dashboard")
+    }
+
+    def unsubscribe(){
+        Users usr = Users.findByEmail(params.email)
+        Topic topic = Topic.findByCreatedByAndName(usr,params.topicname)
+        if(topic.createdBy==usr ){
+            flash.message = "You cannot unsubscribe this topic"
+        }else{
+            Subscription sub = Subscription.findByUsersAndTopic(usr,topic)
+            sub.delete(failOnError: true,flush:true)
+            flash.message = "You have successfully unsubscribed the topic ${sub.topic}"
+        }
+        redirect(controller: "user",action: "dashboard")
     }
 
     def show(Long id) {

@@ -1,12 +1,5 @@
 package linksharing
 
-class DocumentResource{
+class DocumentResource extends Resource{
     String filepath
-    String description
-    Date dateCreated
-    Date lastUpdated
-    static mapping = {
-
-    }
-    static belongsTo = [resources:Resource]
 }

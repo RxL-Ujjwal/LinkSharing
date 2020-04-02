@@ -10,7 +10,7 @@ class Subscription {
         VerySerious(2)
         final int id
         private Seriousness(int id){
-            this.id=id
+                this.id=id
         }
     }
     Date dateCreated

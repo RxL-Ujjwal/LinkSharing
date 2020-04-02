@@ -10,7 +10,7 @@ class UserService {
     //Register User in the Database
     def registerUser(params) {
 
-        Users usr = new Users(email: params.remail, username: params.runame, password: params.rpassword, firstName: params.rfname, lastName: params.rlname, admin: false, active: false, photo: params.rphoto.bytes)
+        Users usr = new Users(email: params.remail, username: params.runame, password: params.rpassword, firstName: params.rfname, lastName: params.rlname, admin: true, active: true, photo: params.rphoto.bytes)
         usr.save(flush: true, failOnError: true)
         return usr
 //        render(view: "user")

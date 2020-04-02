@@ -1,11 +1,14 @@
 package linksharing
 
+import javax.servlet.http.HttpSession
+
 class Topic {
     String name
     Users createdBy
     Date dateCreated
     Date lastUpdated
     Visibility visibility
+
     enum Visibility{
         Private(0),
         Public(1)

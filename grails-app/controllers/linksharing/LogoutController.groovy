@@ -1,18 +1,17 @@
 package linksharing
 
+import javax.servlet.http.HttpSession
+
 class LogoutController {
 
     def index() {
-        redirect controller : "User"
-        def name = session.getAttribute("firstname")
-        if(name!=null){
+        HttpSession session = request.getSession(false);
+        if(session!=null){
             session.invalidate()
-            redirect(uri:"User/index")
-           // render(view: "user")
-
+            flash.message = "Logout Successful"
         }else{
-            flash.message = "Please Login Again"
-            render(view: "user")
-            }
-       }
+            flash.message = "Please Login again"
+        }
+        redirect(controller:"user")
+    }
 }
