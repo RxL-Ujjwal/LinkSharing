@@ -47,6 +47,7 @@
                 <button class="btn btn-light dropdown-toggle" type="button" data-toggle="dropdown">${firstname}
                     <span class="caret"></span></button>
                 <ul class="dropdown-menu">
+                    <li><a href="${createLink(controller: "user",action: "dashboard")}">Dashboard</a></li>
                     <li><a href="${createLink(controller: "logout")}">Logout</a></li>
                 </ul>
             </div>
@@ -100,7 +101,7 @@
                 <label class="p" style="margin-right: 125px;margin-left: 20px;">Username </label>
                 <input type="text" name="uname" required><br><br>
                 <label style="font-size: 15px;margin-right: 148px;margin-left: 20px;">Photo </label>
-                <input type="file" name="photo" required><br>
+                <input type="file" name="photo"><br>
                 <input type="submit" name="update" value="Update" class="sub" style="margin-right: 80px;"><br>
             </g:form>
         </div>

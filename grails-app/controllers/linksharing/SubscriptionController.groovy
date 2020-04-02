@@ -1,5 +1,6 @@
 package linksharing
 
+import grails.converters.JSON
 import grails.validation.ValidationException
 import static org.springframework.http.HttpStatus.*
 
@@ -11,24 +12,14 @@ class SubscriptionController {
 
     def index() { }
 
-    static defaultAction = "subscribedTopicList"
-    def subscribedTopicList(){
-        Users usr = Users.findByEmail(session.getAttribute("email"))
-        List list = Subscription.createCriteria().list {
-            and {
-                inList("user", usr)
-                order("dateCreated", "desc")
-            }
-        }
-        render(view: "/user/dashboard",model:[subscribedTopics:list])
-    }
     def subscribe(){
         Users usr = Users.findByEmail(params.email)
         Topic topic = Topic.findByCreatedByAndName(usr,params.topicname)
-        Subscription sub = new Subscription(Topic:topic,Users:usr,Seriousness:params.seriousness)
+        println(params.seriousness)
+        Subscription sub = new Subscription(topic:topic,user:usr,seriousness:Subscription.Seriousness.VerySerious.name())
         topic.addToSubscriptions(sub)
         topic.save(failOnError:true,flush:true)
-        flash.message="You have subscribed the topic ${sub.topic}"
+        flash.message="You have subscribed the topic ${sub.topic.name}"
         redirect(controller:"user",action: "dashboard")
     }
 
@@ -40,7 +31,7 @@ class SubscriptionController {
         }else{
             Subscription sub = Subscription.findByUsersAndTopic(usr,topic)
             sub.delete(failOnError: true,flush:true)
-            flash.message = "You have successfully unsubscribed the topic ${sub.topic}"
+            flash.message = "You have successfully unsubscribed the topic ${sub.topic.name}"
         }
         redirect(controller: "user",action: "dashboard")
     }

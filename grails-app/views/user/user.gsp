@@ -53,34 +53,35 @@
                  <g:each var="u" in="${RecentList}">
                      <div class="row">
                           <div class="column">
-                              <g:if test="u.createdBy.photo">
+                              <g:if test="${u.createdBy.photo}">
                                   <img style="width: 90px;height: 100px;margin-left: 10px;margin-top: 10px"
                                        src="${createLink(controller: 'user', action: 'fetchUserImage',params:['emailId':u.createdBy.email])}"/>
 %{--                                  <asset:image src="xyz.jpg" alt="Myphoto" height="80px" width="80px" style="margin: 10px 5px 10px 10px;"/>--}%
                               </g:if>
                               <g:else>
-                              <img src="xyz.jpg" alt="Myphoto" height="80px" width="80px" style="margin: 10px 5px 10px 10px;"/>
+                              <asset:image src="xyz.jpg" alt="Myphoto" height="90px" width="90px" style="margin: 10px 5px 10px 10px;"/>
                               </g:else>
                           </div>
                           <div class="column">
                               <div style="height: 50px;width: 450px;">
                                   <label style="font-size: 14px;margin: 12px 5px 0px 10px;"><b>${u.createdBy.firstName} ${u.createdBy.lastName}</b></label>
                                   <label style="font-size: 14px;color: gray;margin: 12px 75px 0px 0px;">@${u.createdBy.username}</label>
-                                  <label style="font-size: 12px;margin: 12px 0px 0px 140px;"><a href="/topic">${u.topic.name}</a></label>
+%{--                                  margin: 12px 0px 0px 120px--}%
+                                  <label style="font-size: 12px;position: relative;float: right;margin-top: 12px;right: 10px"><a href=${createLink(controller: "user",action: "dashboard")}>${u.topic.name}</a></label>
                                   <p class="txt" style="margin-top: 0px;">
-                                      ${u.description}<br>
+                                      <u><i><b>${u.description}</b></i></u><br>
                                       <g:if test="${u.class==linksharing.DocumentResource}">
-                                          <u>Document</u> : <g:link style="word-break: break-all"> ${u.filepath}</g:link>
+                                          Document : <g:link controller="user" action="dashboard" style="word-break: break-all"> ${u.filepath}</g:link>
                                       </g:if>
                                       <g:else>
-                                          <u>Link</u> : <g:link style="word-break: break-all">${u.url}</g:link>
+                                          Link : <g:link controller="user" action="dashboard" style="word-break: break-all">${u.url}</g:link>
                                       </g:else>
                                   </p>
                                   <a href="#" class="fa fa-facebook" style="margin : 8px 5px 5px 10px"></a>
                                   <a href="#" class="fa fa-twitter" style="margin : 8px 5px 5px 5px"></a>
                                   <a href="#" class="fa fa-google" style="margin : 8px 105px 5px 5px"></a>
 
-                                  <a href="/user" style="margin: 0px 0px 5px 205px;font-size: 12px;"><u>View post</u></a>
+                                  <a href="${createLink(controller: "user",action: "dashboard")}" style="margin: 0px 0px 5px 205px;font-size: 12px;"><u>View post</u></a>
                                 </div>
                               </div>
                             </div>

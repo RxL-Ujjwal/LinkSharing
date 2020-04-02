@@ -1,5 +1,7 @@
+<g:set var="email" value="${session.getAttribute("email")}"></g:set>
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,6 +20,24 @@
         <li class="nav-item">
             <a class="nav-link" href="#"><u class="ls">Link Sharing</u></a>
         </li>
+
+        <li class="nav-item">
+            <img style="margin-top:5px;width: 40px;height: 40px;margin-left: 800px" ;
+                 src="data:image/jpg;base64,${photo}"/>
+        </li>
+
+        <li class="nav-item">
+            <div class="dropdown" style="margin: 5px 5px 0px 5px;">
+                <button class="btn btn-light dropdown-toggle" type="button" data-toggle="dropdown">uday
+                    <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li><a href="${createLink(controller: "profile",action: "index")}">Profile</a></li>
+                    <li><a href="${createLink(controller: "user",action: "dashboard")}">Dashboard</a></li>
+                    <li><a href="${createLink(controller: "logout")}">Logout</a></li>
+                </ul>
+            </div>
+        </li>
+
     </ul>
 </nav>
 <div class="container">
@@ -27,24 +47,35 @@
                 <nav class="navbar navbar-expand-sm bg-secondary mynavl">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <b class="ls e">Topic:"Grails"</b>
+                            <b class="ls e">Topic:"${topic.name}"</b>
                         </li>
                     </ul>
                 </nav>
                 <div class="row">
                     <div class="column">
-                        <asset:image src="xyz.jpg" alt="Myphoto" height="70px" width="60px" style="margin: 10px 10px 10px 10px;"/>
+
+                        <g:if test="${topic.createdBy.photo}">
+                            <img style="width: 60px;height: 70px;margin-left: 10px;margin-top: 10px"
+                                 src="${createLink(controller: 'user', action: 'fetchUserImage',params:['emailId':topic.createdBy.email])}"/>
+                        </g:if>
+                        <g:else>
+                            <asset:image src="xyz.jpg" alt="Myphoto" height="70px" width="60px" style="margin: 10px 5px 10px 10px;"/>
+                        </g:else>
+
                     </div>
+
                     <div class="column">
-                        <label style="font-size: 14px;margin: 10px 10px 5px 5px;color: gray;"><a href="topicshow.html" style="margin-right: 5px;"><u>Grails</u></a>(Private)</label>
+                        <label style="font-size: 14px;margin: 10px 10px 5px 5px;color: gray;"><a href="topicshow.html" style="margin-right: 5px;"><u>${topic.name}</u></a>(${topic.visibility.name()})</label>
                         <br>
-                        <label style="font-size: 14px;margin: 0px 30px 5px 5px;color: gray;">@uname</label>
+                        <label style="font-size: 14px;margin: 0px 30px 5px 5px;color: gray;">@${topic.createdBy.username}</label>
                         <label style="font-size: 14px;margin: 0px 10px 5px 30px;color: gray;">Subscriptions</label>
                         <label style="font-size: 14px;margin: 0px 10px 5px 10px;color: gray;">Post</label><br>
-                        <a href="topicshow.html" style="margin: 0px 30px 5px 5px;font-size: 13px;"><u>Subscribe</u></a>
-                        <label style="font-size: 14px;margin: 0px 30px 5px 55px;color:blue;">50</label>
-                        <label style="font-size: 14px;margin: 0px 30px 5px 35px;color: blue;">50</label>
+                        <a href="${createLink(controller: "subscription", action: "subscribe", params: [topicname: topic.name, email: email])}"
+                                               style="margin: 0px 30px 5px 5px;font-size: 13px;"><u>Subscribe</u></a>
+                        <label style="font-size: 14px;margin: 0px 30px 5px 75px;color:blue;">50</label>
+                        <label style="font-size: 14px;margin: 0px 30px 5px 30px;color: blue;">50</label>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -54,7 +85,7 @@
                 <nav class="navbar navbar-expand-sm bg-secondary mynavl">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <b class="ls e">Topic:"Grails"</b>
+                            <b class="ls e">Topic:"${topic.name}"</b>
                         </li>
                     </ul>
                 </nav>

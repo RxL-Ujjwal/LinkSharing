@@ -14,6 +14,7 @@ class UserController {
     }
     def register(){
         Users usr = userService.registerUser(params)
+        flash.message = "You have Registered Successfully"
         redirect(controller:"user",action:"index")
     }
     def dashboard(){
@@ -39,9 +40,18 @@ class UserController {
                     order("dateCreated", "desc")
                 }
             }
-            render(view: "dashboard", model: [subscribedTopics: list,topicList:lst,resourceList:res])
+            List list1 = Topic.createCriteria().list{
+                and{
+                    not{
+                        'in'("createdBy", usr)
+                    }
+                    order("dateCreated", "desc")
+                }
+            }
+            println(list.size())
+            render(view: "dashboard", model: [subscribedTopics: list,topicList:lst,resourceList:res,topicNotCreator:list1])
         }else{
-            flash.message = "Please Login Again"
+            flash.message = "Please Login First"
             redirect(controller:"user")
         }
     }
@@ -93,6 +103,20 @@ class UserController {
         }
         usr.save(flush:true,failOnError:true)
         redirect(controller: "user",action:"userLists")
+    }
+
+    def postShow(){
+        Resource resource = Resource.get(params.resourceId)
+        Users usr = Users.findByEmail(session.email)
+        List list1 = Topic.createCriteria().list{
+            and{
+                not{
+                    'in'("createdBy", usr)
+                }
+                order("dateCreated", "desc")
+            }
+        }
+        render(view: "post",model: [resource:resource,topicNotCreator:list1])
     }
 }
 

@@ -26,12 +26,14 @@ class TopicController {
         render ([success:true] as JSON)
         }
     def topicPage(){
-        println(params.topicId)
-        Topic topic = Topic.get(params.topicId)
-        List list = Users.createCriteria().list{
-            inList("topics",topic)
+
+        Users usr = Users.findByEmail(session.email)
+        Topic topic = Topic.findById(params.topicId)
+        List list = Subscription.createCriteria().list{
+            inList("topic",topic)
         }
-        render(view: "topic",model:[listOfUsers:list])
+        render(view: "topic",model:[topic: topic, listOfUsers:list])
+
     }
 
     def show(Long id) {

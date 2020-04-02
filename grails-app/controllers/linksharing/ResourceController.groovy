@@ -1,5 +1,7 @@
 package linksharing
 
+import grails.converters.JSON
+
 class ResourceController {
 
     def index() { }
@@ -26,5 +28,20 @@ class ResourceController {
         flash.message="Document resource added"
         redirect(controller:"user",action:"dashboard")
         return true
+    }
+    def rating(){
+        Resource resource = Resource.get(params.resourceId)
+        Users usr = Users.findByEmail(session.getAttribute("email"))
+        ResourceRating res = ResourceRating.findByUserAndResource(usr,resource)
+
+        if(res){
+            res.score = Integer.parseInt(params.value)
+            res.save(flush:true , failOnError:true)
+            render([success:false] as JSON)
+        }else{
+            ResourceRating rating = new ResourceRating(score: params.value,user:usr,resource:params.resourceId)
+            rating.save(flush:true,failOnError:true)
+            render([success:true] as JSON)
+        }
     }
 }

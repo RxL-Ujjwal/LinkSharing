@@ -110,24 +110,29 @@
             <g:each in="${resourceList.take(2)}" var="r">
                 <div class="row">
                     <div class="column">
+                        <g:if test="${r.createdBy.photo}">
                         <img style="width: 100px;height: 110px;margin-left: 10px;margin-top: 10px"
                              src="${createLink(controller: 'user', action: 'fetchUserImage',params:['emailId':r.createdBy.email])}"/>
+                        </g:if>
+                        <g:else>
+                            <asset:image src="xyz.jpg" alt="Myphoto" height="100px" width="100px" style="margin: 10px 5px 10px 10px;"/>
+                        </g:else>
                     </div>
 
                     <div class="column">
                     <div style="height: 50px;width: 450px;">
                         <label style="font-size: 14px;margin: 12px 10px 0px 10px;"><b>${r.createdBy.firstName} ${r.createdBy.lastName}</b>
                         </label>
-                        <label style="font-size: 14px;color: gray;margin: 12px 75px 0px 5px;">@${r.createdBy.username}</label>
-                        <label style="font-size: 12px;margin: 12px 0px 0px 120px;"><a href="${createLink(controller: "topic",action: "topicPage",params: ['topicId':r.topic.id])}">${r.topic.name}</a></label>
+                        <label style="font-size: 14px;color: gray;position: relative;">@${r.createdBy.username}</label>
+                        <label style="font-size: 12px;position: relative;float: right;margin-top: 12px;right: 10px"><a href="${createLink(controller: "topic",action: "topicPage",params: ['topicId':r.topic.id])}">${r.topic.name}</a></label>
 
                         <p class="txt" style="margin-top: 0px;">
-                            ${r.description}<br>
+                            <u><i><b>${r.description}</b></i></u><br>
                             <g:if test="${r.class==linksharing.DocumentResource}">
-                                <u>Document</u> : <g:link style="word-break: break-all"> ${r.filepath}</g:link>
+                                Document : <g:link style="word-break: break-all"> ${r.filepath}</g:link>
                             </g:if>
                             <g:else>
-                                <u>Link</u> : <g:link style="word-break: break-all">${r.url}</g:link>
+                                Link : <g:link style="word-break: break-all">${r.url}</g:link>
                             </g:else>
                         </p>
                         <a href="#" class="fa fa-facebook" style="margin : 8px 5px 5px 10px"></a>
@@ -138,7 +143,7 @@
                         </a>
                         <a href="topicshow.html" style="margin: 0px 5px 5px 5px;font-size: 12px;"><u>Mark as read</u>
                         </a>
-                        <a href="topicshow.html" style="margin: 0px 0px 5px 5px;font-size: 12px;"><u>View post</u></a>
+                        <a href="${createLink(controller: "user",action: "postShow",params: ['resourceId':r.id])}" style="margin: 0px 0px 5px 5px;font-size: 12px;"><u>View post</u></a>
                     </div>
                  </div>
                 </div>
@@ -163,8 +168,14 @@
         <g:each in="${subscribedTopics.take(2)}" var="s">
             <div class="row">
                 <div class="column">
-                    <img style="width: 90px;height: 100px;margin-left: 10px;margin-top: 10px"
-                         src="${createLink(controller: 'user', action: 'fetchUserImage',params:['emailId':s.user.email])}"/>
+                    <g:if test="${s.user.photo}">
+                        <img style="width: 90px;height: 100px;margin-left: 10px;margin-top: 10px"
+                             src="${createLink(controller: 'user', action: 'fetchUserImage',params:['emailId':s.user.email])}"/>
+                    %{--                                  <asset:image src="xyz.jpg" alt="Myphoto" height="80px" width="80px" style="margin: 10px 5px 10px 10px;"/>--}%
+                    </g:if>
+                    <g:else>
+                        <asset:image src="xyz.jpg" alt="Myphoto" height="80px" width="80px" style="margin: 10px 5px 10px 10px;"/>
+                    </g:else>
                 </div>
 
                 <div class="column">
@@ -173,12 +184,12 @@
                     <label style="font-size: 14px;margin: 0px 10px 5px 50px;color: gray;">Subscriptions</label>
                     <label style="font-size: 14px;margin: 0px 10px 5px 25px;color: gray;">Post</label><br>
 
-                    <g:if test="${email  ==  s.user.email }">
-                        <a href="${createLink(controller: "subscription", action: "unsubscribe", params: [topicname: s.topic.name, email: s.user.email])}"
+                    <g:if test="${subscribedTopics.contains(s.topic.name)}">
+                        <a href="${createLink(controller: "subscription", action: "unsubscribe", params: [topicname: s.topic.name, email: email])}"
                            style="margin: 0px 30px 5px 5px;font-size: 13px;"><u>Unsubscribe</u></a>
                     </g:if>
                     <g:else>
-                        <a href="${createLink(controller: "subscription", action: "subscribe", params: [topicname: s.topic.name, email: s.user.email])}"
+                        <a href="${createLink(controller: "subscription", action: "subscribe", params: [topicname: s.topic.name, email: email])}"
                            style="margin: 0px 30px 5px 5px;font-size: 13px;"><u>Subscribe</u></a>
                     </g:else>
 
@@ -195,61 +206,59 @@
 
         </div>
     </div>
-
-%{--    <div class="col-md-5 posts" style="height: 130px;margin-top: -6px;margin-left: 15px;">--}%
-%{--        <div>--}%
-%{--            <div class="row">--}%
-%{--                <div class="column">--}%
-%{--                    <asset:image src="xyz.jpg" alt="Myphoto" height="80px" width="80px"--}%
-%{--                                 style="margin: 0px 5px 10px 10px;"/>--}%
-%{--                    --}%%{--                    <img style="margin-top:5px;width: 90px;height: 100px;margin-left: 10px"--}%
-%{--                    --}%%{--                         src="data:image/jpg;base64,${session.getAttribute("photo")}"/>--}%
-%{--                </div>--}%
-
-%{--                <div class="column">--}%
-%{--                    <div style="height: 50px;width: 450px;margin-top: 0px;">--}%
-%{--                        <label style="font-size: 14px;margin: 12px 10px 0px 10px;"><b>${firstname} ${lastname}</b>--}%
-%{--                        </label>--}%
-%{--                        <label style="font-size: 14px;color: gray;margin: 12px 75px 0px 5px;">@${username}</label>--}%
-%{--                        <label style="font-size: 12px;margin: 12px 0px 0px 120px;"><a href="/topic">Grails</a></label>--}%
-
-%{--                        <p class="txt" style="margin-top: 0px;">Asset Pipeline uses a Class type called AssetFile.--}%
-%{--                        These AssetFiles are included into the AssetHelper.assetSpecs static array.--}%
-%{--                        That's how it works.--}%
-%{--                        </p>--}%
-%{--                        <a href="#" class="fa fa-facebook" style="margin : 8px 5px 5px 10px"></a>--}%
-%{--                        <a href="#" class="fa fa-twitter" style="margin : 8px 5px 5px 5px"></a>--}%
-%{--                        <a href="#" class="fa fa-google" style="margin : 8px 0px 5px 5px"></a>--}%
-%{--                        <a href="topicshow.html" style="margin: 0px 5px 5px 80px;font-size: 12px;"><u>Download</u></a>--}%
-%{--                        <a href="topicshow.html" style="margin: 0px 5px 5px 5px;font-size: 12px;"><u>View full site</u>--}%
-%{--                        </a>--}%
-%{--                        <a href="topicshow.html" style="margin: 0px 5px 5px 5px;font-size: 12px;"><u>Mark as read</u>--}%
-%{--                        </a>--}%
-%{--                        <a href="topicshow.html" style="margin: 0px 0px 5px 5px;font-size: 12px;"><u>View post</u></a>--}%
-%{--                    </div>--}%
-%{--                </div>--}%
-%{--            </div>--}%
-%{--        </div>--}%
-%{--    </div>--}%
-
 </div>
 
 
 <div class="row">
-    <div class="col-md-4 " style="height: 150px;margin-top: -1px;margin-left: 100px;">
+    <div class="col-md-4 rounded-top topic" style="height: 265px;margin-top: 25px;margin-left: 100px;">
+        <nav class="navbar navbar-expand-sm bg-secondary mynavl">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <b class="ls e">Trending Topics</b>
+                </li>
+                <a href="#" style="font-size: 14px;margin: 5px 0px 0px 250px;"><u>View all</u></a>
+            </ul>
+        </nav>
+
         <div>
-            <div class="row">
-                <div class="column">
-%{--                    <asset:image src="xyz.jpg" alt="Myphoto" height="70px" width="60px"--}%
-%{--                                 style="margin: 0px 10px 10px 10px;"/>--}%
-%{--                                        <img style="margin-top:5px;width: 90px;height: 100px;margin-left: 10px"--}%
-%{--                                             src="data:image/jpg;base64,${session.getAttribute("photo")}"/>--}%
-                </div>
+            <g:each in="${topicNotCreator.take(2)}" var="s">
+                <div class="row">
+                    <div class="column">
+                        <g:if test="${s.createdBy.photo}">
+                            <img style="width: 90px;height: 100px;margin-left: 10px;margin-top: 10px"
+                                 src="${createLink(controller: 'user', action: 'fetchUserImage',params:['emailId':s.createdBy.email])}"/>
+                        %{--                                  <asset:image src="xyz.jpg" alt="Myphoto" height="80px" width="80px" style="margin: 10px 5px 10px 10px;"/>--}%
+                        </g:if>
+                        <g:else>
+                            <asset:image src="xyz.jpg" alt="Myphoto" height="80px" width="80px" style="margin: 10px 5px 10px 10px;"/>
+                        </g:else>
+                    </div>
 
-                <div class="column">
+                    <div class="column">
+                        <label style="font-size: 14px;margin: 10px 10px 5px 5px;color: gray;"><a href="/topic" style="margin-right: 5px;"><u>${s.name}</u></a></label><br>
+                        <label style="font-size: 14px;margin: 0px 30px 5px 5px;color: gray;">@${s.createdBy.username}</label>
+                        <label style="font-size: 14px;margin: 0px 0px 5px 60px;color: gray;">Subscriptions</label>
+                        <label style="font-size: 14px;margin: 0px 10px 5px 25px;color: gray;">Post</label><br>
 
+                        <g:if test="${email  ==  s.createdBy.email }">
+                            <a href="${createLink(controller: "subscription", action: "unsubscribe", params: [topicname: s.name, email: s.createdBy.email])}"
+                               style="margin: 0px 30px 5px 5px;font-size: 13px;"><u>Unsubscribe</u></a>
+                        </g:if>
+                        <g:else>
+                            <a href="${createLink(controller: "subscription", action: "subscribe", params: [topicname: s.name, email: s.createdBy.email,seriousness:seriousness])}"
+                               style="margin: 0px 30px 5px 5px;font-size: 13px;"><u>Subscribe</u></a>
+                        </g:else>
+
+                        <label style="font-size: 14px;margin: 0px 30px 5px 115px;color:blue;">${subscribedTopics.size()}</label>
+                        <label style="font-size: 14px;margin: 0px 30px 5px 30px;color: blue;">${linksharing.Resource.list().size()}</label><br>
+                        <select id="ser" name="seriousness" style="margin-left: 5px">
+                            <option value="Serious">Serious</option>
+                            <option value="Casual">Casual</option>
+                            <option value="VerySerious">VerySerious</option>
+                        </select><br>
+                    </div>
                 </div>
-            </div>
+            </g:each>
         </div>
     </div>
 
@@ -405,7 +414,7 @@
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="topicCancel">Cancel</button>
 
                     </div>
                 </div>
@@ -413,6 +422,7 @@
         </div>
     </div>
 </div>
+
 </body>
 </html>
 </g:if>
