@@ -1,3 +1,8 @@
+<g:set var="firstname" value="${session.getAttribute("firstname")}"></g:set>
+<g:set var="lastname" value="${session.getAttribute("lastname")}"></g:set>
+<g:set var="username" value="${session.getAttribute("username")}"></g:set>
+<g:set var="email" value="${session.getAttribute("email")}"></g:set>
+<g:set var="photo" value="${session.getAttribute("photo")}"></g:set>
 
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
@@ -28,6 +33,8 @@
         <script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
         <script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
         <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
+        <link href="https://fonts.googleapis.com/css2?family=Flamenco&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
         <asset:stylesheet src="custom.css"/>
         <asset:stylesheet src="userListCustom.css.css"/>
         <title>UserList</title>
@@ -43,8 +50,14 @@
             <a class="nav-link" href="#"><u class="ls">Link Sharing</u></a>
         </li>
         <li class="nav-item">
-            <img style="width: 40px;height: 40px;margin-left: 830px;margin-top: 5px"
-                 src="${createLink(controller: 'user', action: 'fetchUserImage',params:['emailId':session.getAttribute("email")])}"/>
+            <g:if test="${photo}">
+                <img style="margin-top:5px;width: 40px;height: 40px;margin-left: 800px" ;
+                     src="data:image/jpg;base64,${photo}"/>
+            </g:if>
+            <g:else>
+                <asset:image src="xyz.jpg" alt="Myphoto" height="40px" width="40px"
+                             style="margin: 0px 0px 0px 800px;"/>
+            </g:else>
         </li>
         <li class="nav-item">
             <div class="dropdown" style="margin: 5px 5px 0px 5px;">
@@ -52,6 +65,7 @@
                     <span class="caret"></span></button>
                 <ul class="dropdown-menu">
                     <li><a href="${createLink(controller: "profile",action: "index")}">Profile</a></li>
+                    <li><a href="${createLink(controller: "user",action: "dashboard")}">Dashboard</a></li>
                     <li><a href="${createLink(controller: "logout")}">Logout</a></li>
                 </ul>
             </div>

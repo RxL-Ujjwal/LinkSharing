@@ -1,126 +1,181 @@
-h1{
-    margin: 30px 50px 5px 70px;
-    padding: 10px;
+* {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
 }
-.mynav{
+
+/*body {*/
+/*    background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url('../images/laptop.jpg');*/
+/*    background-size: cover;*/
+/*    background-repeat: no-repeat;*/
+/*    background-position: center;*/
+/*    !*height: 100vh;*!*/
+/*}*/
+
+h1 {
+
+    margin: 30px 50px 0px 70px;
+    padding: 10px;
+    animation: colorChangeHeading 1s infinite;
+    text-transform: capitalize;
+    font-family: 'Flamenco', cursive;
+    font-size: 50px;
+}
+
+@keyframes colorChangeHeading {
+    0% {
+        color: red
+    }
+    25% {
+        color: purple
+    }
+    50% {
+        color: black
+    }
+    100% {
+        color: purple
+    }
+}
+
+.mynav {
     margin: 10px 80px 15px 80px;
     padding: 3px;
     border: 1px solid black;
 }
-.ls{
+
+.ls {
     font-size: 20px;
     margin-left: 5px;
 }
+
 /* Recent Shares */
-.r1c1{
+.r1c1 {
     margin: 5px 1.5rem 5px 65px;
     padding: 15px;
     border: 1px solid black;
     height: 250px;
     width: 550px;
 }
+
 /* Login */
-.r1c2{
+.r1c2 {
     margin: 5px 20px 5px 2rem;
     padding: 15px;
     border: 1px solid black;
     height: 220px;
     width: 400px;
 }
+
 /* Top posts */
-.r2c1{
+.r2c1 {
     margin: 10px 1.5rem 5px 65px;
     padding: 15px;
     border: 1px solid black;
     height: 150px;
     width: 550px;
 }
+
 /* Register */
-.r2c2{
+.r2c2 {
     margin: 0px 20px 5px 2rem;
     padding: 15px;
     border: 1px solid black;
     height: 500px;
     width: 300px;
 }
-.mynavl{
+
+.mynavl {
     padding: 0px;
     margin-top: -15px;
     margin-left: -15px;
     margin-right: -15px;
 }
-.fp{
+
+.fp {
     font-size: 15px;
     margin-left: 20px;
     margin-top: 15px;
 
 }
-.e{
+
+.e {
     font-size: 15px;
     margin-right: 5px;
 }
-.p{
+
+.p {
     font-size: 15px;
     margin-right: 50px;
 }
-.sub{
+
+.sub {
     float: right;
     margin-right: 20px;
 }
-.topic{
+
+.topic {
     margin: 5px 1.5rem 0px 65px;
     padding: 15px;
     border: 1px solid black;
     height: 170px;
 }
-.posts{
+
+.posts {
     margin: 5px 1.5rem 5px 65px;
     padding: 15px;
     border: 1px solid black;
     height: 250px;
 }
-.txt{
+
+.txt {
     margin: 25px 0px 0px 7px;
     text-align: justify;
     font-size: 13px;
 }
-.users{
+
+.users {
     margin: -65px 1.5rem 0px 65px;
     padding: 15px;
     border: 1px solid black;
     height: 158px;
 }
+
 .rating {
-    float:right;
+    float: right;
     margin-top: 5px;
 }
 
 .rating:not(:checked) > input {
-    position:absolute;
-    top:-9999px;
-    clip:rect(0,0,0,0);
+    position: absolute;
+    top: -9999px;
+    clip: rect(0, 0, 0, 0);
 }
+
 .rating:not(:checked) > label {
-    float:right;
-    width:1em;
+    float: right;
+    width: 1em;
     /* padding:0 .1em; */
-    overflow:hidden;
-    white-space:nowrap;
-    cursor:pointer;
-    font-size:150%;
+    overflow: hidden;
+    white-space: nowrap;
+    cursor: pointer;
+    font-size: 150%;
     /* line-height:1.2; */
-    color:dimgray;
+    color: dimgray;
 }
+
 .rating:not(:checked) > label:before {
     content: '★ ';
 }
+
 .rating > input:checked ~ label {
     color: dodgerblue;
 }
+
 .rating:not(:checked) > label:hover,
 .rating:not(:checked) > label:hover ~ label {
     color: dodgerblue;
 }
+
 .rating > input:checked + label:hover,
 .rating > input:checked + label:hover ~ label,
 .rating > input:checked ~ label:hover,
@@ -128,8 +183,9 @@ h1{
 .rating > label:hover ~ input:checked ~ label {
     color: dodgerblue;
 }
+
 .rating > label:active {
-    position:relative;
-    top:2px;
-    left:2px;
+    position: relative;
+    top: 2px;
+    left: 2px;
 }

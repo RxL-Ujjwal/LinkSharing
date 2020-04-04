@@ -10,24 +10,44 @@
     <asset:link rel="icon" href="favicon.ico" type="image/x-ico"/>
 
     <asset:stylesheet src="application.css"/>
+    <asset:stylesheet src="custom.css"/>
 
     <g:layoutHead/>
 </head>
 
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark navbar-static-top" role="navigation">
-    <a class="navbar-brand" href="/#"><asset:image src="grails.svg" alt="Grails Logo"/></a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+<g:set var="photo" value="${session.getAttribute("photo")}"></g:set>
+<nav class="navbar navbar-expand-sm bg-light rounded mynav">
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" href="#"><u class="ls">Link Sharing</u></a>
+        </li>
+        <li class="nav-item">
 
-    <div class="collapse navbar-collapse" aria-expanded="false" style="height: 0.8px;" id="navbarContent">
-        <ul class="nav navbar-nav ml-auto">
-            <g:pageProperty name="page.nav"/>
-        </ul>
-    </div>
+            <g:if test="${photo}">
+                <img style="margin-top:5px;width: 40px;height: 40px;margin-left: 800px" ;
+                     src="data:image/jpg;base64,${photo}"/>
+            </g:if>
+            <g:else>
+                <asset:image src="xyz.jpg" alt="Myphoto" height="40px" width="40px"
+                             style="margin: 0px 0px 0px 790px;"/>
+            </g:else>
 
+        </li>
+
+        <li class="nav-item">
+            <div class="dropdown" style="margin: 5px 5px 0px 5px;">
+                <button class="btn btn-light dropdown-toggle" type="button" data-toggle="dropdown">${firstname}
+                    <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li><a href="${createLink(controller: "user",action: "dashboard")}">Dashboard</a></li>
+                    <li><a href="${createLink(controller: "logout")}">Logout</a></li>
+                </ul>
+            </div>
+
+        </li>
+    </ul>
 </nav>
 
 <g:layoutBody/>

@@ -13,12 +13,11 @@ class UserService {
         Users usr = new Users(email: params.remail, username: params.runame, password: params.rpassword, firstName: params.rfname, lastName: params.rlname, admin: true, active: true, photo: params.rphoto.bytes)
         usr.save(flush: true, failOnError: true)
         return usr
-//        render(view: "user")
     }
 
     //User Logged in and switch to dashboard
     def loginUser(params) {
-        Users vale = Users.findByEmailAndPassword(params.logemail, params.logpassword)
-        return vale
+        Users loggedInUser = Users.findByEmailAndPassword(params.logemail, params.logpassword)
+        return loggedInUser
     }
 }

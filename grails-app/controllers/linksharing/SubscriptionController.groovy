@@ -13,9 +13,8 @@ class SubscriptionController {
     def index() { }
 
     def subscribe(){
-        Users usr = Users.findByEmail(params.email)
-        Topic topic = Topic.findByCreatedByAndName(usr,params.topicname)
-        println(params.seriousness)
+        Users usr = Users.findByEmail(session.getAttribute("email"))
+        Topic topic = Topic.get(params.topicId)
         Subscription sub = new Subscription(topic:topic,user:usr,seriousness:Subscription.Seriousness.VerySerious.name())
         topic.addToSubscriptions(sub)
         topic.save(failOnError:true,flush:true)
@@ -24,12 +23,13 @@ class SubscriptionController {
     }
 
     def unsubscribe(){
-        Users usr = Users.findByEmail(params.email)
-        Topic topic = Topic.findByCreatedByAndName(usr,params.topicname)
+        Users usr = Users.findByEmail(session.getAttribute("email"))
+        Topic topic = Topic.get(params.topicId)
         if(topic.createdBy==usr ){
             flash.message = "You cannot unsubscribe this topic"
         }else{
-            Subscription sub = Subscription.findByUsersAndTopic(usr,topic)
+            Subscription sub = Subscription.findByUserAndTopic(usr,topic)
+            println(sub.properties)
             sub.delete(failOnError: true,flush:true)
             flash.message = "You have successfully unsubscribed the topic ${sub.topic.name}"
         }

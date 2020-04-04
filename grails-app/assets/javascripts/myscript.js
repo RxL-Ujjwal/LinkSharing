@@ -22,9 +22,9 @@ var rate = function(){
         data:{"value": $("input[type='radio'][name='rating']:checked").val(),"resourceId":$(".res").text() },
         success: function (data) {
             if(data.success  ==  true){
-                alert("success")
+                $('#messg').html("You have rate the Topic Successfully");
             }else{
-                alert("rating changed")
+                $('#messg').html("You have change the rating of this Topic");
             }
         },
         error: function () {
@@ -33,14 +33,21 @@ var rate = function(){
     });
 };
 
+
 $(document).ready(function(){
+
+    $('#rateMessage').hide()
+
     $("#star1,#star2,#star3,#star4,#star5").click(function(){
+        $('#rateMessage').show()
         rate()
     });
+
     $("#ctopic").click(function(){
         create();
         $("#topicCancel").click();
     });
+
     $("#cpass").blur(function(){
         if($(this).val()!=$("#pass").val())
             alert("Password Mismatch.");

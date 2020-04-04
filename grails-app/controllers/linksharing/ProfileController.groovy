@@ -3,22 +3,47 @@ package linksharing
 class ProfileController {
 
     def index() {
-        Users usr = Users.findByEmail(session.getAttribute("email"))
+        if(session.email) {
+            Users usr = Users.findByEmail(session.getAttribute("email"))
 
-        List list = Subscription.createCriteria().list {
-            and {
-                inList("user", usr)
-                order("dateCreated", "desc")
-            }
+            List<Subscription> subscribedTopicsListOfUser = Subscription.findAllByUser(usr)
+
+            List<Topic> topicsCreatedByUser = Topic.findAllByCreatedBy(usr)
+
+            List<Resource> resourcesCreatedByUser = Resource.findAllByCreatedBy(usr)
+
+            render(view: "/user/profile", model: [subscribedTopicsListOfUser: subscribedTopicsListOfUser,
+                                                  topicsCreatedByUser       : topicsCreatedByUser, resourcesCreatedByUser: resourcesCreatedByUser])
+        } else {
+            flash.message = "Please Login First"
+            redirect(controller: "user")
         }
-        List lst = Topic.createCriteria().list{
-            and{
-                inList("createdBy", usr)
-                order("dateCreated", "desc")
-            }
-        }
-        render(view:"/user/profile",model:[subscribedTopics: list,topicList:lst])
     }
+
+    def subscribe(){
+        Users usr = Users.findByEmail(params.email)
+        Topic topic = Topic.findByCreatedByAndName(usr,params.topicname)
+        println(params.seriousness)
+        Subscription sub = new Subscription(topic:topic,user:usr,seriousness:Subscription.Seriousness.VerySerious.name())
+        topic.addToSubscriptions(sub)
+        topic.save(failOnError:true,flush:true)
+        flash.message="You have subscribed the topic ${sub.topic.name}"
+        redirect(controller:"profile",action: "index")
+    }
+
+    def unsubscribe(){
+        Users usr = Users.findByEmail(params.email)
+        Topic topic = Topic.findByCreatedByAndName(usr,params.topicname)
+        if(topic.createdBy==usr ){
+            flash.message = "You cannot unsubscribe this topic"
+        }else{
+            Subscription sub = Subscription.findByUsersAndTopic(usr,topic)
+            sub.delete(failOnError: true,flush:true)
+            flash.message = "You have successfully unsubscribed the topic ${sub.topic.name}"
+        }
+        redirect(controller: "profile",action: "index")
+    }
+
     def changeDetails() {
         Users usr = Users.findByEmail(session.getAttribute("email"))
         usr.firstName = params.fname
@@ -48,5 +73,8 @@ class ProfileController {
             flash.message = "Password Mismatch"
             redirect(controller:"profile")
         }
+    }
+    def userProfile(){
+        render(view:"userProfile")
     }
 }

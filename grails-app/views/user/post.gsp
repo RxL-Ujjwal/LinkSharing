@@ -3,6 +3,7 @@
 <g:set var="username" value="${session.getAttribute("username")}"></g:set>
 <g:set var="email" value="${session.getAttribute("email")}"></g:set>
 <g:set var="photo" value="${session.getAttribute("photo")}"></g:set>
+<g:set var="userId" value="${session.getAttribute("userId")}"></g:set>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -10,17 +11,36 @@
     <title>Post</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <asset:stylesheet href="custom.css"/>
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Flamenco&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <asset:stylesheet href="custom.css"/>
     <asset:javascript src="myscript.js"/>
 </head>
 
-<body>
+<body style="height: 100vh;">
 <h1>Post</h1>
+
+
+<g:if test="${flash.message}">
+    <div class="panel animated shake">
+        <div class="panel-body bg-info text-center">
+            ${flash.message}
+        </div>
+    </div>
+</g:if>
+
+<div class="panel animated shake" id="rateMessage">
+    <div class="panel-body bg-info text-center">
+        <label id="messg"></label>
+    </div>
+</div>
+
 
 <nav class="navbar navbar-expand-sm bg-light rounded mynav">
     <ul class="navbar-nav">
@@ -29,8 +49,14 @@
         </li>
 
         <li class="nav-item">
-            <img style="margin-top:5px;width: 40px;height: 40px;margin-left: 790px" ;
-                 src="data:image/jpg;base64,${photo}"/>
+            <g:if test="${photo}">
+                <img style="margin-top:5px;width: 40px;height: 40px;margin-left: 790px" ;
+                     src="data:image/jpg;base64,${photo}"/>
+            </g:if>
+            <g:else>
+                <asset:image src="xyz.jpg" alt="Myphoto" height="40px" width="40px"
+                             style="margin: 0px 0px 0px 790px;"/>
+            </g:else>
         </li>
 
         <li class="nav-item">
@@ -69,11 +95,11 @@
                     <div style="height: 50px;width: 450px;">
                         <label style="font-size: 25px;margin: 12px 95px 0px 10px;"><b>${firstname} ${lastname}</b>
                         </label>
-                        <label style="font-size: 20px;margin: 12px 0px 0px 75px;"><a
+                        <label style="font-size: 20px;position: relative;float: right;margin-top: 15px"><a
                                 href="${createLink(controller: "topic",action: "topicPage",params: ['topicId':resource.topic.id])}"><u>${resource.topic.name}</u></a></label>
                         <label style="font-size: 17px;color: gray;margin: 12px 75px 0px 10px;">@${username}</label>
 
-                        <div class="rating">
+                        <div class="rating" style="position: relative;float: right;left: 110px">
 
                             <input type="radio" id="star5" name="rating" value="5"/><label for="star5"
                                                                                            title="Exceptional">5 stars</label>
@@ -115,13 +141,13 @@
         </div>
     </div>
 
-            <div class="col-md-4 rounded-top topic" style="height: 285px;margin-top: 25px;margin-left: 10px;">
+            <div class="col-md-4 rounded-top topic" style="height: 265px;margin-top: 25px;margin-left: 10px;">
                 <nav class="navbar navbar-expand-sm bg-secondary mynavl">
                     <ul class="navbar-nav">
                         <li class="nav-item">
                             <b class="ls e">Trending Topics</b>
                         </li>
-                        <a href="#" style="font-size: 14px;margin: 5px 0px 0px 200px;"><u>View all</u></a>
+                        <a href="#" style="font-size: 14px;margin: 5px 0px 0px 200px;color: black"><u>View all</u></a>
                     </ul>
                 </nav>
 
@@ -135,7 +161,7 @@
                                 %{--                                  <asset:image src="xyz.jpg" alt="Myphoto" height="80px" width="80px" style="margin: 10px 5px 10px 10px;"/>--}%
                                 </g:if>
                                 <g:else>
-                                    <asset:image src="xyz.jpg" alt="Myphoto" height="80px" width="80px" style="margin: 10px 5px 10px 10px;"/>
+                                    <asset:image src="xyz.jpg" alt="Myphoto" height="100px" width="80px" style="margin: 10px 5px 10px 10px;"/>
                                 </g:else>
                             </div>
 
@@ -145,17 +171,10 @@
                                 <label style="font-size: 14px;margin: 0px 0px 5px 60px;color: gray;">Subscriptions</label>
                                 <label style="font-size: 14px;margin: 0px 10px 5px 25px;color: gray;">Post</label><br>
 
-                                <g:if test="${email  ==  s.createdBy.email }">
-                                    <a href="${createLink(controller: "subscription", action: "unsubscribe", params: [topicname: s.name, email: s.createdBy.email])}"
-                                       style="margin: 0px 30px 5px 5px;font-size: 13px;"><u>Unsubscribe</u></a>
-                                </g:if>
-                                <g:else>
-                                    <a href="${createLink(controller: "subscription", action: "subscribe", params: [topicname: s.name, email: s.createdBy.email,seriousness:seriousness])}"
-                                       style="margin: 0px 30px 5px 5px;font-size: 13px;"><u>Subscribe</u></a>
-                                </g:else>
+                                <label style="margin: 0px 30px 5px 5px;font-size: 13px;"><u><ls:showSubscribe userId="${userId}" topicId="${s.id}"></ls:showSubscribe></u></label>
 
-                                <label style="font-size: 14px;margin: 0px 30px 5px 115px;color:blue;">50</label>
-                                <label style="font-size: 14px;margin: 0px 30px 5px 30px;color: blue;">50</label><br>
+                                <label style="font-size: 14px;position: relative;float:right;color:blue;right: 100px"><ls:subscriptionCount userId="${s.createdBy.id}"></ls:subscriptionCount> </label>
+                                <label style="font-size: 14px;position: relative;float:right;color:blue;right: 15px"><ls:postCount topicId="${s.id}"></ls:postCount></label><br>
                                 <select id="ser" name="seriousness" style="margin-left: 5px">
                                     <option value="Serious">Serious</option>
                                     <option value="Casual">Casual</option>

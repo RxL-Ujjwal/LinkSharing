@@ -29,10 +29,14 @@ class TopicController {
 
         Users usr = Users.findByEmail(session.email)
         Topic topic = Topic.findById(params.topicId)
-        List list = Subscription.createCriteria().list{
+
+        List<Subscription> subscribedUsersOfThisTopic = Subscription.createCriteria().list{
             inList("topic",topic)
         }
-        render(view: "topic",model:[topic: topic, listOfUsers:list])
+        List<Resource> postsRelatedToThisTopic = Resource.findAllByTopic(topic)
+
+        render(view: "topic",model:[topic: topic, subscribedUsersOfThisTopic:subscribedUsersOfThisTopic,
+                                    postsRelatedToThisTopic:postsRelatedToThisTopic])
 
     }
 

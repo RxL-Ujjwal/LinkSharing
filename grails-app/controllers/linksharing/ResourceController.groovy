@@ -29,6 +29,7 @@ class ResourceController {
         redirect(controller:"user",action:"dashboard")
         return true
     }
+
     def rating(){
         Resource resource = Resource.get(params.resourceId)
         Users usr = Users.findByEmail(session.getAttribute("email"))
@@ -43,5 +44,24 @@ class ResourceController {
             rating.save(flush:true,failOnError:true)
             render([success:true] as JSON)
         }
+    }
+
+    def download(){
+        DocumentResource dr = DocumentResource.get(params.docResourceId)
+        File file = new File(dr.filepath)
+        byte[] orderPDF = file.bytes
+        response.setHeader("Content-disposition","attachment;filename = "+file.name)
+        response.contentType = "application/octet-stream"
+        response.contentLength = orderPDF.length
+        response.outputStream<<orderPDF
+        response.outputStream.flush()
+        response.outputStream.close()
+    }
+    def isRead(){
+        Users usr = Users.get(params.userId)
+        Resource resource = Resource.get(params.resourceId)
+        ReadingItem itemRead = new ReadingItem(user: usr,resource: resource,isRead: params.value)
+        itemRead.save(flush:true,failOnError:true)
+        render([success:true] as JSON)
     }
 }

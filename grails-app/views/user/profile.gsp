@@ -10,22 +10,24 @@
     <title>Edit Profile</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <asset:stylesheet href="custom.css"/>
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Flamenco&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <asset:stylesheet href="custom.css"/>
     <asset:javascript src="myscript.js"/>
 </head>
 
 <body>
 <h1>Edit Profile</h1>
 
-
 <g:if test="${flash.message}">
-    <div class="panel">
-        <div class="panel-body bg-danger text-center">
+    <div class="panel animated shake">
+        <div class="panel-body bg-info text-center">
             ${flash.message}
         </div>
     </div>
@@ -37,8 +39,15 @@
             <a class="nav-link" href="#"><u class="ls">Link Sharing</u></a>
         </li>
         <li class="nav-item">
-            <img style="width: 40px;height: 40px;margin-left: 770px;margin-top: 5px"
-                 src="${createLink(controller: 'user', action: 'fetchUserImage',params:['emailId':email])}"/>
+
+            <g:if test="${photo}">
+                <img style="margin-top:5px;width: 40px;height: 40px;margin-left: 800px" ;
+                     src="data:image/jpg;base64,${photo}"/>
+            </g:if>
+            <g:else>
+                <asset:image src="xyz.jpg" alt="Myphoto" height="40px" width="40px"
+                             style="margin: 0px 0px 0px 790px;"/>
+            </g:else>
 
         </li>
 
@@ -77,8 +86,8 @@
                     <label style="font-size: 14px;color: gray;margin: 0px 5px 0px 10px;">@${username}</label><br>
                     <label style="font-size: 14px;color: gray;margin: 0px 10px 0px 10px;">Subscriptions</label>
                     <label style="font-size: 14px;color: gray;margin: 0px 10px 0px 10px;">Topics</label><br>
-                    <label style="font-size: 14px;margin: 0px 30px 0px 35px;color:blue;">50</label>
-                    <label style="font-size: 14px;margin: 0px 30px 0px 45px;color: blue;">50</label>
+                    <label style="font-size: 14px;position: relative;color:blue;left:40px;">${subscribedTopicsListOfUser.size()}</label>
+                    <label style="font-size: 14px;position: relative;color:blue;left:120px;">${topicsCreatedByUser.size()}</label>
                 </div>
             </div>
         </div>
@@ -120,11 +129,17 @@
                 </ul>
             </nav>
 
-            <g:each in="${topicList.take(2)}" var="s">
+            <g:each in="${topicsCreatedByUser.take(2)}" var="s">
                 <div class="row">
                     <div class="column">
-                        <img style="width: 90px;height: 100px;margin-left: 10px;margin-top: 10px"
-                             src="${createLink(controller: 'user', action: 'fetchUserImage',params:['emailId':s.createdBy.email])}"/>
+                        <g:if test="${s.createdBy.photo}">
+                            <img style="width: 90px;height: 100px;margin-left: 10px;margin-top: 10px"
+                                src="${createLink(controller: 'user', action: 'fetchUserImage',params:['emailId':s.createdBy.email])}"/>
+                        </g:if>
+                        <g:else>
+                            <asset:image src="xyz.jpg" alt="Myphoto" height="100px" width="90px"
+                                         style="margin: 10px 10px 10px 10px;"/>
+                        </g:else>
                     </div>
 
                     <div class="column">
@@ -134,16 +149,16 @@
                         <label style="font-size: 14px;margin: 0px 10px 5px 25px;color: gray;">Post</label><br>
 
                         <g:if test="${email  ==  s.createdBy.email }">
-                            <a href="${createLink(controller: "subscription", action: "unsubscribe", params: [topicname: s.name, email: s.createdBy.email])}"
+                            <a href="${createLink(controller: "profile", action: "unsubscribe", params: [topicname: s.name, email: s.createdBy.email])}"
                                style="margin: 0px 30px 5px 5px;font-size: 13px;"><u>Unsubscribe</u></a>
                         </g:if>
                         <g:else>
-                            <a href="${createLink(controller: "subscription", action: "subscribe", params: [topicname: s.name, email: s.createdBy.email])}"
+                            <a href="${createLink(controller: "profile", action: "subscribe", params: [topicname: s.name, email: s.createdBy.email])}"
                                style="margin: 0px 30px 5px 5px;font-size: 13px;"><u>Subscribe</u></a>
                         </g:else>
 
-                        <label style="font-size: 14px;margin: 0px 30px 5px 75px;color:blue;">${subscribedTopics.size()}</label>
-                        <label style="font-size: 14px;margin: 0px 30px 5px 30px;color: blue;">${linksharing.Resource.list().size()}</label><br>
+                        <label style="font-size: 14px;position: relative;left:80px;color:blue;">${subscribedTopicsListOfUser.size()}</label>
+                        <label style="font-size: 14px;position: relative;left:170px;color:blue;">${resourcesCreatedByUser.size()}</label><br>
                         <select id="ser" name="seriousness" style="margin-left: 5px">
                             <option value="Serious">Serious</option>
                             <option value="Casual">Casual</option>
