@@ -39,12 +39,13 @@
 
         <li class="nav-item">
             <g:if test="${photo}">
-                <img style="margin-top:5px;width: 40px;height: 40px;margin-left: 800px" ;
-                     src="data:image/jpg;base64,${photo}"/>
+                <a href=${createLink(controller: "profile",action: "userProfile")}>
+                    <img style="margin-top:5px;width: 40px;height: 40px;margin-left: 800px" ;
+                         src="data:image/jpg;base64,${photo}"/></a>
             </g:if>
             <g:else>
-                <asset:image src="xyz.jpg" alt="Myphoto" height="40px" width="40px"
-                             style="margin: 0px 0px 0px 800px;"/>
+                <a href = ${createLink(controller:"profile",action:"userProfile")}><asset:image src="xyz.jpg" alt="Myphoto" height="40px" width="40px"
+                                                                                                style="margin: 0px 0px 0px 790px;"/></a>
             </g:else>
             </li>
 
@@ -62,6 +63,7 @@
 
     </ul>
 </nav>
+
 <div class="container">
     <div class="row">
         <div class="col-md-4 rounded-top topic" style="margin-right: 15px;margin-left: 50px;height:150px">
@@ -174,7 +176,7 @@
                     </ul>
                 </nav>
 
-                <g:each in="${subscribedUsersOfThisTopic}" var="u">
+                <g:each in="${subscribedUsersOfThisTopic.take(2)}" var="u">
                     <div class="row">
                         <div class="column">
                             <g:if test="${u.user.photo}">

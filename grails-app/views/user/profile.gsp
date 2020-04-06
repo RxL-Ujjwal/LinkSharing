@@ -41,12 +41,13 @@
         <li class="nav-item">
 
             <g:if test="${photo}">
-                <img style="margin-top:5px;width: 40px;height: 40px;margin-left: 800px" ;
-                     src="data:image/jpg;base64,${photo}"/>
+                <a href=${createLink(controller: "profile",action: "userProfile")}>
+                    <img style="margin-top:5px;width: 40px;height: 40px;margin-left: 800px" ;
+                         src="data:image/jpg;base64,${photo}"/></a>
             </g:if>
             <g:else>
-                <asset:image src="xyz.jpg" alt="Myphoto" height="40px" width="40px"
-                             style="margin: 0px 0px 0px 790px;"/>
+                <a href = ${createLink(controller:"profile",action:"userProfile")}><asset:image src="xyz.jpg" alt="Myphoto" height="40px" width="40px"
+                                                                                                style="margin: 0px 0px 0px 790px;"/></a>
             </g:else>
 
         </li>
@@ -102,7 +103,7 @@
                     </li>
                 </ul>
             </nav><br>
-            <g:form controller="profile" action="changeDetails">
+            <g:form controller="profile" action="changeDetailsOfUser">
                 <label class="p" style="margin-right: 125px;margin-left: 20px;">First name </label>
                 <input type="text" name="fname" required><br><br>
                 <label class="p" style="margin-right: 125px;margin-left: 20px;">Last name </label>
@@ -125,7 +126,7 @@
                     <li class="nav-item">
                         <b class="ls e">Topics</b>
                     </li>
-                    <a href="#" style="font-size: 14px;margin: 5px 0px 0px 250px;"><u>View all</u></a>
+                    <a href="#" style="font-size: 14px;margin-top:5px;left: 300px;position:relative;color: black"><u>View all</u></a>
                 </ul>
             </nav>
 

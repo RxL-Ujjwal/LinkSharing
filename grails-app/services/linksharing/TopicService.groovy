@@ -1,18 +1,32 @@
 package linksharing
 
-import grails.gorm.services.Service
+import grails.converters.JSON
+import grails.gorm.transactions.Transactional
 
-@Service(Topic)
-interface TopicService {
+@Transactional
+class TopicService {
+    def topicPage(params) {
 
-    Topic get(Serializable id)
+        Topic topic = Topic.findById(params.topicId)
 
-    List<Topic> list(Map args)
+        List<Subscription> subscribedUsersOfThisTopic = Subscription.createCriteria().list {
+            inList("topic", topic)
+        }
+        List<Resource> postsRelatedToThisTopic = Resource.findAllByTopic(topic)
 
-    Long count()
+        return [topic : topic, subscribedUsersOfThisTopic: subscribedUsersOfThisTopic,
+                 postsRelatedToThisTopic: postsRelatedToThisTopic]
+    }
+    Topic createTopic(params,session){
 
-    void delete(Serializable id)
-
-    Topic save(Topic topic)
-
+        Users user = Users.findByEmail(session.getAttribute("email"))
+        if(Topic.countByCreatedByAndName(user,params.name)){
+            return null
+        } else {
+            Topic topic = new Topic(name: params.name, visibility: params.visibility, createdBy: user)
+            Subscription sub = new Subscription(topic: topic,user:user,seriousness: Subscription.Seriousness.VerySerious.name())
+            topic.addToSubscriptions(sub)
+            return topic.save(flush: true, failOnError: true)
+        }
+    }
 }

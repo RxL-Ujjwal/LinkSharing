@@ -67,9 +67,7 @@
                     <span class="caret"></span></button>
                 <ul class="dropdown-menu">
                     <li><a href="${createLink(controller: "profile",action: "index")}">Profile</a></li>
-                    <li><a href="${createLink(controller: "user",action: "userLists")}">Users</a></li>
-                    <li><a href="#">Topics</a></li>
-                    <li><a href="#">Posts</a></li><hr>
+                    <li><a href="${createLink(controller: "user",action: "userLists")}">Users</a></li><hr>
                     <li class="divider"></li>
                     <li><a href="${createLink(controller: "logout")}">Logout</a></li>
                 </ul>
@@ -150,17 +148,18 @@
                         <a href="#" class="fa fa-google" style="margin : 8px 0px 5px 5px;color: red"></a>
 
                         <g:if test="${r.class==linksharing.DocumentResource}">
-                            <a href="${createLink(controller: "resource",action: "download",params: [docResourceId: r.id])}" style="margin: 0px 5px 5px 160px;font-size: 12px;"><u>Download</u></a>
+                            <a href="${createLink(controller: "resource",action: "download",params: [docResourceId: r.id])}" style="margin: 0px 5px 5px 140px;font-size: 12px;"><u>Download</u></a>
                         </g:if>
 
                         <g:if test="${r.class==linksharing.LinkResource}">
-                            <a href="${r.url}" target="_blank" style="margin: 0px 5px 5px 150px;font-size: 12px;"><u>View full site</u>
+                            <a href="${r.url}" target="_blank" style="margin: 0px 5px 5px 140px;font-size: 12px;"><u>View full site</u>
                         </a>
                         </g:if>
 
-                        <a href="${createLink(controller: "resource",action: "isRead,params:[userId:r.createdBy.id,resourceId:r.id,isState:true]")}" style="margin: 0px 5px 5px 5px;font-size: 12px;" id="mar"><u>Mark as read</u>
+                        <label style="margin: 0px 5px 5px 0px;font-size: 12px;"><u><ls:markAsRead userId="${userId}" resourceId="${r.id}"></ls:markAsRead></u></label>
 
-                        </a>
+%{--                        <a href="${createLink(controller: "readingItem",action: "isRead,params:[userId:r.createdBy.id,resourceId:r.id,isState:true]")}" style="margin: 0px 5px 5px 5px;font-size: 12px;" id="mar"><u>Mark as read</u></a>--}%
+
                         <a href="${createLink(controller: "user",action: "postShow",params: ['resourceId':r.id])}" style="margin: 0px 0px 5px 5px;font-size: 12px;"><u>View post</u></a>
                     </div>
                  </div>
@@ -184,35 +183,7 @@
 
         <div>
         <g:each in="${subscribedTopicsListOfUser.take(2)}" var="s">
-            <div class="row">
-                <div class="column">
-                    <g:if test="${s.user.photo}">
-                        <img style="width: 90px;height: 100px;margin-left: 10px;margin-top: 10px"
-                             src="${createLink(controller: 'user', action: 'fetchUserImage',params:['emailId':s.user.email])}"/>
-                    %{--                                  <asset:image src="xyz.jpg" alt="Myphoto" height="80px" width="80px" style="margin: 10px 5px 10px 10px;"/>--}%
-                    </g:if>
-                    <g:else>
-                        <asset:image src="xyz.jpg" alt="Myphoto" height="100px" width="80px" style="margin: 10px 5px 10px 10px;"/>
-                    </g:else>
-                </div>
-
-                <div class="column" style="margin-left: 20px">
-                    <label style="font-size: 14px;margin: 10px 10px 5px 5px;color: gray;"><a href="/topic" style="margin-right: 5px;"><u>${s.topic.name}</u></a></label><br>
-                    <label style="font-size: 14px;margin: 0px 30px 5px 5px;color: gray;">@${s.user.username}</label>
-                    <label style="font-size: 14px;margin: 0px 10px 5px 50px;color: gray;">Subscriptions</label>
-                    <label style="font-size: 14px;margin: 0px 10px 5px 25px;color: gray;">Post</label><br>
-
-                    <label style="margin: 0px 30px 5px 5px;font-size: 13px;"><u><ls:showSubscribe userId="${userId}" topicId="${s.topic.id}"></ls:showSubscribe></u></label>
-
-                    <label style="font-size: 14px;position: relative;float:right;color:blue;right: 110px"><ls:subscriptionCount userId="${s.user.id}"></ls:subscriptionCount> </label>
-                    <label style="font-size: 14px;position: relative;float:right;color:blue;right: 15px"><ls:postCount topicId="${s.topic.id}"></ls:postCount> </label><br>
-                    <select id="ser" name="seriousness" style="margin-left: 5px">
-                        <option value="Serious">Serious</option>
-                        <option value="Casual">Casual</option>
-                        <option value="VerySerious">VerySerious</option>
-                    </select><br>
-                </div>
-            </div>
+            <g:render template="/topic/topic" model="[topic:s.topic]"></g:render>
         </g:each>
 
         </div>
@@ -233,35 +204,7 @@
 
         <div>
             <g:each in="${trendingTopicsList.take(2)}" var="s">
-                <div class="row">
-                    <div class="column">
-                        <g:if test="${s[1].createdBy.photo}">
-                            <img style="width: 80px;height: 100px;margin-left: 10px;margin-top: 10px"
-                                 src="${createLink(controller: 'user', action: 'fetchUserImage',params:['emailId':s[1].createdBy.email])}"/>
-                        %{--                                  <asset:image src="xyz.jpg" alt="Myphoto" height="80px" width="80px" style="margin: 10px 5px 10px 10px;"/>--}%
-                        </g:if>
-                        <g:else>
-                            <asset:image src="xyz.jpg" alt="Myphoto" height="80px" width="80px" style="margin: 10px 5px 10px 10px;"/>
-                        </g:else>
-                    </div>
-
-                    <div class="column" style="margin-left: 20px">
-                        <label style="font-size: 14px;margin: 10px 10px 5px 5px;color: gray;"><a href="/topic" style="margin-right: 5px;"><u>${s[1].name}</u></a></label><br>
-                        <label style="font-size: 14px;margin: 0px 30px 5px 5px;color: gray;">@${s[1].createdBy.username}</label>
-                        <label style="font-size: 14px;margin: 0px 0px 5px 60px;color: gray;">Subscriptions</label>
-                        <label style="font-size: 14px;margin: 0px 10px 5px 25px;color: gray;">Post</label><br>
-
-                        <label style="margin: 0px 30px 5px 5px;font-size: 13px;"><u><ls:showSubscribe userId="${userId}" topicId="${s[1].id}"></ls:showSubscribe></u></label>
-
-                        <label style="font-size: 14px;position: relative;float:right;color:blue;right: 110px"><ls:subscriptionCount userId="${s[1].createdBy.id}"></ls:subscriptionCount></label>
-                        <label style="font-size: 14px;position: relative;float:right;color: blue;right: 15px"><ls:postCount topicId="${s[1].id}">   </ls:postCount> </label><br>
-                        <select id="seri" name="seriousness" style="margin-left: 5px">
-                            <option value="Serious">Serious</option>
-                            <option value="Casual">Casual</option>
-                            <option value="VerySerious">VerySerious</option>
-                        </select><br>
-                    </div>
-                </div>
+                <g:render template="/topic/topic" model="[topic:s[1]]"></g:render>
             </g:each>
         </div>
     </div>
@@ -367,12 +310,12 @@
                         <g:form controller="emailSender" action="send">
                             <label style="margin-right: 55px;">Email</label>
                             <input type="email" name="address" id="email"><br>
-                            <label style="margin-right: 45px;">Subject</label>
+                            <label style="margin-right: 40px;">Subject</label>
                             <input type="text" name="subject" id="sub"><br>
                             <label style="margin-right: 55px;">Body</label>
                             <g:textArea name="body" id="body" placeholder="Body"></g:textArea><br>
                         %{--                            <g:select name="emailTopic" from="${linksharing.Topic.list().name}" id="topice"/><br>--}%
-                            <input type="Submit" value="Invite">
+                            <input type="Submit" style="float: right;position: relative;right:180px;" value="Invite">
                         </g:form>
                     </div>
 

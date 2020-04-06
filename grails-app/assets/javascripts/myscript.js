@@ -17,7 +17,7 @@ var create = function(){
 
 var rate = function(){
     $.ajax({
-        url: "/resource/rating/",
+        url: "/resourceRating/rating/",
         type: "POST",
         data:{"value": $("input[type='radio'][name='rating']:checked").val(),"resourceId":$(".res").text() },
         success: function (data) {

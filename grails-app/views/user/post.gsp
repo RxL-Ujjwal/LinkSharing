@@ -50,12 +50,13 @@
 
         <li class="nav-item">
             <g:if test="${photo}">
-                <img style="margin-top:5px;width: 40px;height: 40px;margin-left: 790px" ;
-                     src="data:image/jpg;base64,${photo}"/>
+                <a href=${createLink(controller: "profile",action: "userProfile")}>
+                    <img style="margin-top:5px;width: 40px;height: 40px;margin-left: 800px" ;
+                         src="data:image/jpg;base64,${photo}"/></a>
             </g:if>
             <g:else>
-                <asset:image src="xyz.jpg" alt="Myphoto" height="40px" width="40px"
-                             style="margin: 0px 0px 0px 790px;"/>
+                <a href = ${createLink(controller:"profile",action:"userProfile")}><asset:image src="xyz.jpg" alt="Myphoto" height="40px" width="40px"
+                                                                                                style="margin: 0px 0px 0px 790px;"/></a>
             </g:else>
         </li>
 

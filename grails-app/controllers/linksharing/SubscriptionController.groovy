@@ -26,7 +26,7 @@ class SubscriptionController {
         Users usr = Users.findByEmail(session.getAttribute("email"))
         Topic topic = Topic.get(params.topicId)
         if(topic.createdBy==usr ){
-            flash.message = "You cannot unsubscribe this topic"
+            flash.message = "You cannot unsubscribe your own topic"
         }else{
             Subscription sub = Subscription.findByUserAndTopic(usr,topic)
             println(sub.properties)

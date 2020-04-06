@@ -9,73 +9,34 @@ class UserController {
     UserService userService
 
     def index() {
-        List<Topic> topic = Topic.findAllByVisibility("Public")
-        List<Resource> recentSharesPublicList = Resource.createCriteria().list(max: 5){
-            inList("topic",topic)
-            order("dateCreated","desc")
-        }
-
-        List<ResourceRating> topPosts = ResourceRating.createCriteria().list(max: 5) {
-            order "score", "desc"
-        }
-        render(view:"user",model:[recentSharesPublicList:recentSharesPublicList,topPosts:topPosts])
+        render(view: "user", model: userService.homePage())
     }
 
-    def register(){
+    def register() {
 
         Users usr = userService.registerUser(params)
         flash.message = "You have Registered Successfully"
-        redirect(controller:"user",action:"index")
+        redirect(controller: "user", action: "index")
 
     }
 
-    def dashboard(){
+    def dashboard() {
 
         if (session.getAttribute("firstname")) {
-
-            Users usr = Users.findByEmail(session.getAttribute("email"))
-
-            List<Subscription> subscribedTopicsListOfUser = Subscription.findAllByUser(usr)
-
-            List<Topic> topicsCreatedByUser = Topic.findAllByCreatedBy(usr)
-
-            List<Resource> resourcesCreatedByUser = Resource.findAllByCreatedBy(usr)
-
-            List<Resource> trendingTopicsList = Resource.createCriteria().list(max: 5) {
-                projections {
-                    count("id", "t")
-                }
-                groupProperty("topic")
-                order("t", "desc")
-            }
-
-            List<Topic> topic = Topic.findAllByVisibility("Public")
-            List<Resource> resourceListForInbox = Resource.createCriteria().list {
-                and {
-                    not {
-                        'in'("createdBy", usr)
-                    }
-                    inList("topic", topic)
-                }
-                order("dateCreated", "desc")
-            }
-
-            render(view: "dashboard", model: [subscribedTopicsListOfUser: subscribedTopicsListOfUser, topicsCreatedByUser: topicsCreatedByUser,
-                                              resourcesCreatedByUser:resourcesCreatedByUser , resourceListForInbox: resourceListForInbox,
-                                              trendingTopicsList: trendingTopicsList])
+            render(view: "dashboard", model: userService.dashboard(session))
         } else {
             flash.message = "Please Login First"
             redirect(controller: "user")
         }
     }
 
-    def login(){
+    def login() {
 
         Users loggedInUser = userService.loginUser(params)
-        if(loggedInUser!=null && loggedInUser.active==true) {
+        if (loggedInUser != null && loggedInUser.active == true) {
             HttpSession session = request.getSession();
-            session.setAttribute("active",loggedInUser.active)
-            session.setAttribute("userId",loggedInUser.id)
+            session.setAttribute("active", loggedInUser.active)
+            session.setAttribute("userId", loggedInUser.id)
             session.setAttribute("firstname", loggedInUser.firstName)
             session.setAttribute("lastname", loggedInUser.lastName)
             session.setAttribute("username", loggedInUser.username)
@@ -84,19 +45,19 @@ class UserController {
             if (loggedInUser.photo != null) {
                 String encode = Base64.getEncoder().encodeToString(loggedInUser.photo)
                 session.setAttribute("photo", encode)
-            }else{
+            } else {
                 session.setAttribute("photo", null)
             }
 
             redirect(controller: "user", action: "dashboard")
 
-        }else{
+        } else {
             flash.message = "Wrong Email Id or Password"
-            redirect(controller:"user")
+            redirect(controller: "user")
         }
     }
 
-    def fetchUserImage(){
+    def fetchUserImage() {
 
         Users uemail = Users.findByEmail(params.emailId)
         byte[] imageInByte = uemail.photo
@@ -106,37 +67,68 @@ class UserController {
 
     }
 
-    def userLists(){
-
-        render(view: "userList",model: [list: Users.list(offSet: 0)])
+    def userLists() {
+        render(view: "userList", model: [list: Users.list(offSet: 0)])
     }
 
-    def changeActiveStatus(){
+    def changeActiveStatus() {
 
-        Users usr = Users.get(params.userId)
-        if(usr.active==true){
-            usr.active=false
-        }else{
-            usr.active=true
+        Users user = Users.get(params.userId)
+        if (user.active == true) {
+            user.active = false
+        } else {
+            user.active = true
         }
-        usr.save(flush:true,failOnError:true)
-        redirect(controller: "user",action:"userLists")
+        user.save(flush: true, failOnError: true)
+        redirect(controller: "user", action: "userLists")
 
     }
 
-    def postShow(){
+    def postShow() {
 
-        Resource resource = Resource.get(params.resourceId)
-        Users usr = Users.findByEmail(session.email)
-        List<Topic> list1 = Topic.createCriteria().list {
-            not {
-                'in'("createdBy", usr)
+        if (session.getAttribute("firstname")) {
+            render(view: "post", model: userService.postShow(params,session))
+        } else {
+            flash.message = "Please Login First"
+            redirect(controller: "user")
+        }
+    }
+
+        def resetPassword() {
+            println(params.userId)
+            Users user = Users.get(params.userId)
+            render(view: "/user/resetPassword",model: [user:user])
+        }
+
+        def changePassword(){
+            println(params)
+            Users user = Users.findById(params.userId)
+            if(user){
+                user.password = params.password
+                user.save(flush:true , failOnError:true)
+                return([success:true] as JSON)
             }
-            order("dateCreated", "desc")
+            render([success:false] as JSON)
         }
-        render(view: "post",model: [resource:resource,topicNotCreator:list1])
-    }
 
+        def forgotPassword() {
+            String email = params.emailForgot
+            println(email)
+            println(params.emailForgot)
+            Users user = Users.findByEmail(email)
+            if (user) {
+                println("Inside")
+                sendMail {
+                    to params.emailForgot
+                    subject "Reset password"
+                    text "http://localhost:9090/user/resetPassword?userId=${user.id}"
+                }
+                render([success: true] as JSON)
+            } else {
+                render([success: false] as JSON)
+            }
+        }
 }
+
 
 
