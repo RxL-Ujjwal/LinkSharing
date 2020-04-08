@@ -8,11 +8,13 @@ class ReadingItemController {
 
     def isRead(){
 
-        Users usr = Users.get(params.userId)
+        Users usr = Users.get(session.userId)
         Resource resource = Resource.get(params.resourceId)
-        ReadingItem readingItem = new ReadingItem(user: usr, resource: resource, isRead: params.isState)
-        readingItem.save(flush: true,failOnError: true)
+        ReadingItem readingItem = ReadingItem.findByResourceAndUser(resource,usr)
+        if (readingItem) {
+            readingItem.isRead = true
+            readingItem.save(flush: true)
+        }
         redirect(controller:"user",action:"dashboard")
-
     }
 }

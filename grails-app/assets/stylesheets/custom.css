@@ -4,13 +4,13 @@
     box-sizing: border-box;
 }
 
-/*body {*/
-/*    background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url('../images/laptop.jpg');*/
-/*    background-size: cover;*/
-/*    background-repeat: no-repeat;*/
-/*    background-position: center;*/
-/*    !*height: 100vh;*!*/
-/*}*/
+body {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url('../images/laptop.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    /*height: 100vh;*/
+}
 
 h1 {
 
@@ -93,8 +93,8 @@ h1 {
 
 .fp {
     font-size: 15px;
-    margin-left: 20px;
-    margin-top: 15px;
+    margin-left: 15px;
+    margin-top: 20px;
 
 }
 

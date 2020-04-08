@@ -185,7 +185,7 @@
                     <li class="nav-item">
                         <b class="ls e">Topics</b>
                     </li>
-                    <a href="#" style="font-size: 14px;margin-top:5px;left: 300px;position:relative;color: black"><u>View all</u></a>
+                    <a href="${createLink(controller: "subscription",action: "userTopicsList")}" style="font-size: 14px;margin: 5px 0px 0px 300px;color: black"><u>View all</u></a>
                 </ul>
             </nav>
 
@@ -241,7 +241,7 @@
                 <li class="nav-item">
                     <b class="ls e">Subscriptions</b>
                 </li>
-                <a href="#" style="font-size: 14px;margin: 5px 0px 0px 250px;color: black"><u>View all</u></a>
+                <a href="${createLink(controller: "subscription",action: "subscribedTopicsList")}" style="font-size: 14px;margin: 5px 0px 0px 250px;color: black"><u>View all</u></a>
             </ul>
         </nav>
 

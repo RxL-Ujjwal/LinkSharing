@@ -98,9 +98,9 @@
                         </label>
                         <label style="font-size: 20px;position: relative;float: right;margin-top: 15px"><a
                                 href="${createLink(controller: "topic",action: "topicPage",params: ['topicId':resource.topic.id])}"><u>${resource.topic.name}</u></a></label>
-                        <label style="font-size: 17px;color: gray;margin: 12px 75px 0px 10px;">@${username}</label>
+                        <label style="font-size: 17px;color: gray;position: relative;right:-10px">@${username}</label>
 
-                        <div class="rating" style="position: relative;float: right;left: 110px">
+                        <div class="rating" style="position: relative;float: right;left: 50px">
 
                             <input type="radio" id="star5" name="rating" value="5"/><label for="star5"
                                                                                            title="Exceptional">5 stars</label>
@@ -115,7 +115,7 @@
 
                             <div class="res" hidden>${resource.id}</div>
                             <div id="message"></div>
-                        </div><br>
+                        </div><br><br>
 
                         <p class="txt" style="margin:30px 5px 5px -60px;font-size: 18px">
                             <u><i><b>${resource.description}</b></i></u><br>
@@ -132,9 +132,13 @@
                         <a href="#" class="fa fa-google"
                            style="margin : 8px 0px 5px 5px;font-size: 25px;color: red"></a>
 
-                        <a href="topicshow.html" style="margin: 0px 5px 5px 200px;font-size: 18px;"><u>Download</u></a>
-                        <a href="topicshow.html" style="margin: 0px 5px 5px 5px;font-size: 18px;"><u>View full site</u>
-                        </a>
+                        <g:if test="${resource.class == linksharing.DocumentResource}">
+                            <a href="${createLink(controller: "resource",action: "download",params:[docResouceId:resource.id])}" style="margin: 0px 5px 5px 330px;font-size: 18px;"><u>Download</u></a>
+                        </g:if>
+                        <g:else>
+                            <a href="${resource.url}" target="_blank" style="margin: 0px 5px 5px 310px;font-size: 18px;"><u>View full site</u></a>
+                        </g:else>
+
 
                     </div>
                 </div>

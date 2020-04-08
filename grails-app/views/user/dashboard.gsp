@@ -5,7 +5,7 @@
 <g:set var="photo" value="${session.getAttribute("photo")}"></g:set>
 <g:set var="userId" value="${session.getAttribute("userId")}"></g:set>
 
-<g:if test="${firstname}">
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -35,7 +35,7 @@
 </head>
 
 <body>
-<h1 style="margin-top: 15px">Dashboard</h1>
+<h1 style="margin-top: 15px;">Dashboard</h1>
 
 <g:if test="${flash.message}">
     <div class="panel animated shake">
@@ -44,6 +44,12 @@
         </div>
     </div>
 </g:if>
+
+<div class="panel animated shake" id="infoDiv">
+    <div class="panel-body bg-info text-center">
+        <label id="info"></label>
+    </div>
+</div>
 
 <nav class="navbar navbar-expand-sm bg-light rounded mynav">
     <ul class="navbar-nav">
@@ -118,49 +124,49 @@
             <g:each in="${resourceListForInbox.take(2)}" var="r">
                 <div class="row">
                     <div class="column">
-                        <g:if test="${r.createdBy.photo}">
+                        <g:if test="${r.user.photo}">
                         <img style="width: 100px;height: 110px;margin-left: 30px;margin-top: 10px"
-                             src="${createLink(controller: 'user', action: 'fetchUserImage',params:['emailId':r.createdBy.email])}"/>
+                             src="${createLink(controller: 'user', action: 'fetchUserImage',params:['emailId':r.user.email])}"/>
                         </g:if>
                         <g:else>
-                            <asset:image src="xyz.jpg" alt="Myphoto" height="100px" width="100px" style="margin: 10px 5px 10px 30px;"/>
+                            <asset:image src="xyz.jpg" alt="Myphoto" height="110px" width="100px" style="margin: 10px 5px 10px 30px;"/>
                         </g:else>
                     </div>
 
                     <div class="column" style="margin-left: 20px">
                     <div style="height: 50px;width: 450px;">
-                        <label style="font-size: 14px;margin: 12px 10px 0px 10px;"><b>${r.createdBy.firstName} ${r.createdBy.lastName}</b>
+                        <label style="font-size: 14px;margin: 12px 10px 0px 10px;"><b>${r.user.firstName} ${r.user.lastName}</b>
                         </label>
-                        <label style="font-size: 14px;color: gray;position: relative;">@${r.createdBy.username}</label>
-                        <label style="font-size: 12px;position: relative;float: right;margin-top: 12px;right: 10px"><a href="${createLink(controller: "topic",action: "topicPage",params: ['topicId':r.topic.id])}">${r.topic.name}</a></label>
+                        <label style="font-size: 14px;color: gray;position: relative;">@${r.user.username}</label>
+                        <label style="font-size: 12px;position: relative;float: right;margin-top: 12px;right: 10px"><a href="${createLink(controller: "topic",action: "topicPage",params: ['topicId':r.resource.topic.id])}">${r.resource.topic.name}</a></label>
 
                         <p class="txt" style="margin-top: 0px;">
-                            <u><i><b>${r.description}</b></i></u><br>
-                            <g:if test="${r.class==linksharing.DocumentResource}">
-                                Document : <g:link style="word-break: break-all"> ${r.filepath}</g:link>
+                            <u><i><b>${r.resource.description}</b></i></u><br>
+                            <g:if test="${r.resource.class==linksharing.DocumentResource}">
+                                Document : <g:link controller="resource" action="download" style="word-break: break-all"> ${r.resource.filepath}</g:link>
                             </g:if>
                             <g:else>
-                                Link : <g:link style="word-break: break-all">${r.url}</g:link>
+                                Link : <g:link controller="user" action="dashboard" style="word-break: break-all">${r.resource.url}</g:link>
                             </g:else>
                         </p>
                         <a href="#" class="fa fa-facebook" style="margin : 8px 5px 5px 10px;"></a>
                         <a href="#" class="fa fa-twitter" style="margin : 8px 5px 5px 5px;color: purple"></a>
                         <a href="#" class="fa fa-google" style="margin : 8px 0px 5px 5px;color: red"></a>
 
-                        <g:if test="${r.class==linksharing.DocumentResource}">
-                            <a href="${createLink(controller: "resource",action: "download",params: [docResourceId: r.id])}" style="margin: 0px 5px 5px 140px;font-size: 12px;"><u>Download</u></a>
+                        <g:if test="${r.resource.class==linksharing.DocumentResource}">
+                            <a href="${createLink(controller: "resource",action: "download",params: [docResourceId: r.resource.id])}" style="margin: 0px 5px 5px 140px;font-size: 12px;"><u>Download</u></a>
                         </g:if>
 
-                        <g:if test="${r.class==linksharing.LinkResource}">
-                            <a href="${r.url}" target="_blank" style="margin: 0px 5px 5px 140px;font-size: 12px;"><u>View full site</u>
+                        <g:if test="${r.resource.class==linksharing.LinkResource}">
+                            <a href="${r.resource.url}" target="_blank" style="margin: 0px 5px 5px 140px;font-size: 12px;"><u>View full site</u>
                         </a>
                         </g:if>
 
-                        <label style="margin: 0px 5px 5px 0px;font-size: 12px;"><u><ls:markAsRead userId="${userId}" resourceId="${r.id}"></ls:markAsRead></u></label>
+%{--                        <label style="margin: 0px 5px 5px 0px;font-size: 12px;" id="mar"><u><ls:markAsRead userId="${userId}" resourceId="${r.id}"></ls:markAsRead></u></label>--}%
 
-%{--                        <a href="${createLink(controller: "readingItem",action: "isRead,params:[userId:r.createdBy.id,resourceId:r.id,isState:true]")}" style="margin: 0px 5px 5px 5px;font-size: 12px;" id="mar"><u>Mark as read</u></a>--}%
+                        <a href="${createLink(controller: "readingItem",action: "isRead",params:['resourceId':r.resource.id])}" style="margin: 0px 5px 5px 5px;font-size: 12px;" id="mar"><u>Mark as read</u></a>
 
-                        <a href="${createLink(controller: "user",action: "postShow",params: ['resourceId':r.id])}" style="margin: 0px 0px 5px 5px;font-size: 12px;"><u>View post</u></a>
+                        <a href="${createLink(controller: "user",action: "postShow",params: ['resourceId':r.resource.id])}" style="margin: 0px 0px 5px 5px;font-size: 12px;"><u>View post</u></a>
                     </div>
                  </div>
                 </div>
@@ -170,47 +176,47 @@
     </div>
 
 
-    <div class="col-md-4 rounded-top topic" style="margin-left: 100px;margin-top: -150px;height: 265px">
+    <div class="col-md-4 rounded-top topic" style="margin-left: 100px;margin-top: -150px;height:320px;overflow-y: scroll">
 
-        <nav class="navbar navbar-expand-sm bg-secondary mynavl">
+        <nav class="navbar navbar-expand-sm bg-secondary mynavl" style="position: relative">
                 <ul class="navbar-nav">
                     <li class="nav-item">
                         <b class="ls e">Subscriptions</b>
                     </li>
-                    <a href="#" style="font-size: 14px;margin: 5px 0px 0px 250px;color: black"><u>View all</u></a>
+                    <a href="${createLink(controller: "subscription",action: "subscribedTopicsList")}" style="font-size: 14px;margin: 5px 0px 0px 250px;color: black"><u>View all</u></a>
                 </ul>
         </nav>
 
-        <div>
-        <g:each in="${subscribedTopicsListOfUser.take(2)}" var="s">
+        <div style="">
+        <g:each in="${subscribedTopicsListOfUser.take(5)}" var="s">
             <g:render template="/topic/topic" model="[topic:s.topic]"></g:render>
         </g:each>
-
         </div>
+
     </div>
 </div>
 
 
 <div class="row">
-    <div class="col-md-4 rounded-top topic" style="height: 265px;margin-top: 25px;margin-left: 100px;">
-        <nav class="navbar navbar-expand-sm bg-secondary mynavl">
+    <div class="col-md-4 rounded-top topic" style="height: 320px;overflow-y:scroll;margin-top: 25px;margin-left: 100px;">
+        <nav class="navbar navbar-expand-sm bg-secondary mynavl" style="position: relative">
             <ul class="navbar-nav">
                 <li class="nav-item">
                     <b class="ls e">Trending Topics</b>
                 </li>
-                <a href="#" style="font-size: 14px;margin: 5px 0px 0px 250px;color: black"><u>View all</u></a>
+                <a href="${createLink(controller: "subscription",action: "trendingTopicsList")}" style="font-size: 14px;margin: 5px 0px 0px 240px;color: black"><u>View all</u></a>
             </ul>
         </nav>
 
         <div>
-            <g:each in="${trendingTopicsList.take(2)}" var="s">
+            <g:each in="${trendingTopicsList.take(5)}" var="s">
                 <g:render template="/topic/topic" model="[topic:s[1]]"></g:render>
             </g:each>
         </div>
     </div>
 
 
-    <div class="column" style="margin-left: 35px;margin-top: -100px">
+    <div class="column" style="margin-left: 35px;margin-top: -150px">
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
             Share Link
         </button>
@@ -250,7 +256,7 @@
         </div>
     </div>
 
-    <div class="column" style="margin-left: 25px;margin-top: -75px">
+    <div class="column" style="margin-left: 25px;margin-top: -120px">
         <button type="button" class="btn btn-info" data-toggle="modal" data-target="#example">
             Share Document
         </button>
@@ -291,7 +297,7 @@
         </div>
     </div>
 
-    <div class="column" style="margin-left: 25px;margin-top: -50px">
+    <div class="column" style="margin-left: 25px;margin-top: -90px">
         <button type="button" class="btn btn-success" data-toggle="modal" data-target="#examp">
             Send Invitation
         </button>
@@ -329,7 +335,7 @@
         </div>
     </div>
 
-    <div class="column" style="margin-left: 25px;margin-top: -25px">
+    <div class="column" style="margin-left: 25px;margin-top: -60px">
         <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#eg">
             Create Topic
         </button>
@@ -372,7 +378,3 @@
 
 </body>
 </html>
-</g:if>
-<g:else>
-    <g:link controller="user" action="index">Hello</g:link>
-</g:else>

@@ -9,15 +9,14 @@ class UserController {
     UserService userService
 
     def index() {
-        render(view: "user", model: userService.homePage())
+
+        Map model = userService.homePage()
+        render(view : "user", model: model)
     }
 
-    def register() {
-
-        Users usr = userService.registerUser(params)
-        flash.message = "You have Registered Successfully"
-        redirect(controller: "user", action: "index")
-
+    def registerUser() {
+        userService.registerUser(params,flash)
+        redirect(controller: "user")
     }
 
     def dashboard() {
@@ -25,7 +24,7 @@ class UserController {
         if (session.getAttribute("firstname")) {
             render(view: "dashboard", model: userService.dashboard(session))
         } else {
-            flash.message = "Please Login First"
+            flash.error = "Please Login First"
             redirect(controller: "user")
         }
     }
@@ -41,6 +40,7 @@ class UserController {
             session.setAttribute("lastname", loggedInUser.lastName)
             session.setAttribute("username", loggedInUser.username)
             session.setAttribute("email", loggedInUser.email)
+            session.setAttribute("admin",loggedInUser.admin)
 
             if (loggedInUser.photo != null) {
                 String encode = Base64.getEncoder().encodeToString(loggedInUser.photo)
@@ -52,8 +52,13 @@ class UserController {
             redirect(controller: "user", action: "dashboard")
 
         } else {
-            flash.message = "Wrong Email Id or Password"
-            redirect(controller: "user")
+            if (loggedInUser != null && loggedInUser.active == false) {
+                flash.error = "Sorry,You're Locked by an Admin"
+                redirect(controller: "user")
+            } else {
+                flash.error = "Wrong Email Id or Password"
+                redirect(controller: "user")
+            }
         }
     }
 
@@ -68,7 +73,13 @@ class UserController {
     }
 
     def userLists() {
-        render(view: "userList", model: [list: Users.list(offSet: 0)])
+        println(session.admin)
+        if(session.getAttribute("firstname") && session.admin==true) {
+            render(view: "userList", model: [list: Users.list()])
+        } else {
+            flash.message = "You are not authorised to view this page"
+            redirect(controller: "user" , action: "dashboard")
+        }
     }
 
     def changeActiveStatus() {
@@ -89,45 +100,42 @@ class UserController {
         if (session.getAttribute("firstname")) {
             render(view: "post", model: userService.postShow(params,session))
         } else {
-            flash.message = "Please Login First"
+            flash.error = "Please Login First"
             redirect(controller: "user")
         }
     }
 
-        def resetPassword() {
-            println(params.userId)
-            Users user = Users.get(params.userId)
-            render(view: "/user/resetPassword",model: [user:user])
-        }
+    def resetPassword() {
+        Users user = Users.get(params.userId)
+        render(view: "/user/resetPassword",model: [user:user])
+    }
 
-        def changePassword(){
-            println(params)
-            Users user = Users.findById(params.userId)
-            if(user){
-                user.password = params.password
-                user.save(flush:true , failOnError:true)
-                return([success:true] as JSON)
-            }
-            render([success:false] as JSON)
+    def changePassword(){
+        Users user = Users.findById(params.userId)
+        if(user){
+            user.password = params.password
+            user.save(flush:true , failOnError:true)
+            return([success:true] as JSON)
         }
+        render([success:false] as JSON)
+    }
 
-        def forgotPassword() {
-            String email = params.emailForgot
-            println(email)
-            println(params.emailForgot)
-            Users user = Users.findByEmail(email)
-            if (user) {
-                println("Inside")
-                sendMail {
-                    to params.emailForgot
-                    subject "Reset password"
-                    text "http://localhost:9090/user/resetPassword?userId=${user.id}"
-                }
-                render([success: true] as JSON)
-            } else {
-                render([success: false] as JSON)
+    def forgotPassword() {
+        String email = params.emailForgot
+        println(params.emailForgot)
+        Users user = Users.findByEmail(email)
+        if (user) {
+            println("Inside")
+            sendMail {
+                to params.emailForgot
+                subject "Reset password"
+                text "http://localhost:9090/user/resetPassword?userId=${user.id}"
             }
+            render([success: true] as JSON)
+        } else {
+            render([success: false] as JSON)
         }
+    }
 }
 
 

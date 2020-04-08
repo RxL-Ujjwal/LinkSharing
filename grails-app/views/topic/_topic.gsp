@@ -7,12 +7,19 @@
         %{--                                  <asset:image src="xyz.jpg" alt="Myphoto" height="80px" width="80px" style="margin: 10px 5px 10px 10px;"/>--}%
         </g:if>
         <g:else>
-            <asset:image src="xyz.jpg" alt="Myphoto" height="80px" width="80px" style="margin: 10px 5px 10px 10px;"/>
+            <asset:image src="xyz.jpg" alt="Myphoto" height="100px" width="80px" style="margin: 10px 5px 10px 10px;"/>
         </g:else>
     </div>
 
-    <div class="column" style="margin-left: 20px">
-        <label style="font-size: 14px;margin: 10px 10px 5px 5px;color: gray;"><a href="/topic" style="margin-right: 5px;"><u>${topic.name}</u></a></label><br>
+    <div class="column" style="margin-left: 0px;">
+        <label style="font-size: 14px;margin: 10px 10px 5px 5px;color: gray;"><a href="/topic" style="margin-right: 10px;"><u>${topic.name}</u></a></label>
+        <g:if test="${topic.createdBy.id == session.userId}">
+            <input type="button" value="Change" class="changeOwner" style="position:relative;left:180px;margin-top: 5px">
+        </g:if>
+        <g:else>
+            <input type="button" value="Change" class="changeNotOwner"  style="position:relative;left:155px;margin-top: 5px">
+        </g:else>
+        <br>
         <label style="font-size: 14px;margin: 0px 30px 5px 5px;color: gray;">@${topic.createdBy.username}</label>
         <label style="font-size: 14px;margin: 0px 0px 5px 60px;color: gray;">Subscriptions</label>
         <label style="font-size: 14px;margin: 0px 10px 5px 25px;color: gray;">Post</label><br>
@@ -21,10 +28,87 @@
 
         <label style="font-size: 14px;position: relative;float:right;color:blue;right: 110px"><ls:subscriptionCount userId="${topic.createdBy.id}"></ls:subscriptionCount></label>
         <label style="font-size: 14px;position: relative;float:right;color: blue;right: 15px"><ls:postCount topicId="${topic.id}">   </ls:postCount> </label><br>
-        <select id="seri" name="seriousness" style="margin-left: 5px">
+
+        <select class="seriousness" name="seriousness" topicId="${topic.id}" style="margin-left: 5px">
             <option value="Serious">Serious</option>
             <option value="Casual">Casual</option>
             <option value="VerySerious">VerySerious</option>
-        </select><br>
+        </select>
+
+        <g:if test="${topic.createdBy.id == session.userId}">
+
+            <select class="visibility" name="visibility" topicId="${topic.id}" style="margin-left: 5px">
+                <option value="Public">Public</option>
+                <option value="Private">Private</option>
+            </select>
+
+            <div class="col" style="display: contents">
+
+                <a href="#my_modal" data-toggle="modal"
+                   data-topic-id="http://localhost:9090/topic/topicPage?topicId=${topic.id}"><i
+                        class="fa fa-envelope"
+                        style="font-size: 20px;color: black;position:relative;left: 100px;"></i>
+                </a>
+
+                <div class="modal" id="my_modal">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title"
+                                    id="exampleModalLongTitle2"><b>SEND INVITE</b>
+
+                                    <div class="alert-success">
+                                    </div>
+
+                                </h5>
+                                <button type="button" class="close"
+                                        data-dismiss="modal"
+                                        aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+
+                            <div class="modal-body">
+                                <div class="fieldcontain"
+                                     style="margin-bottom: 3px">
+                                    <g:textField name="address"
+                                                 placeholder="email"
+                                                 required="" id="address${topicId}"/>
+                                </div>
+
+                                <div>${topicId}</div>
+
+                                <div class="fieldcontain"
+                                     style="margin-bottom: 3px">
+                                    <g:textField name="subject"
+                                                 placeholder="Subject"
+                                                 required="" id="subject${topicId}"/>
+                                </div>
+
+                                <div class="fieldcontain"
+                                     style="margin-bottom: 3px">
+                                    <g:textArea name="topicId" rows="5"
+                                                cols="50"
+                                                required="" id="text${topicId}"/>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="submit"
+                                        class="btn btn-primary">Invite</button>
+                                <button type="button"
+                                        class="btn btn-secondary"
+                                        data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <i style="cursor: pointer;color: black ;font-size: 20px;position:relative;left:10px"
+                   class="fa fa-pencil-square-o fa-lg topicEdit" topicId="${topic.id}"></i>
+                <i class="fa fa-trash fa-lg delete" id="delete" trashId="${topic.id}" aria-hidden="true"
+                   style="color:black; position: relative;left: 20px;font-size: 20px;cursor: pointer"
+                   ;></i>
+            </div>
+        </g:if>
     </div>
 </div>

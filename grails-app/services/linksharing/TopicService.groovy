@@ -5,7 +5,7 @@ import grails.gorm.transactions.Transactional
 
 @Transactional
 class TopicService {
-    def topicPage(params) {
+    Map topicPage(params) {
 
         Topic topic = Topic.findById(params.topicId)
 
@@ -17,6 +17,7 @@ class TopicService {
         return [topic : topic, subscribedUsersOfThisTopic: subscribedUsersOfThisTopic,
                  postsRelatedToThisTopic: postsRelatedToThisTopic]
     }
+
     Topic createTopic(params,session){
 
         Users user = Users.findByEmail(session.getAttribute("email"))
@@ -27,6 +28,53 @@ class TopicService {
             Subscription sub = new Subscription(topic: topic,user:user,seriousness: Subscription.Seriousness.VerySerious.name())
             topic.addToSubscriptions(sub)
             return topic.save(flush: true, failOnError: true)
+        }
+    }
+
+    boolean delete(params){
+
+        Topic topic = Topic.get(params.topicId)
+        List<Resource> resource = Resource.findAllByTopic(topic)
+        resource.each{readingItem->
+            List<ReadingItem> readingItems = ReadingItem.findAllByResource(readingItem)
+            readingItems.each{items->
+                items.delete(failOnError: true,flush:true)
+            }
+            List<ResourceRating> resourceRatings = ResourceRating.findAllByResource(readingItem)
+            resourceRatings.each{rr->
+                rr.delete(failOnError: true,flush: true)
+            }
+            readingItem.delete(failOnError: true,flush: true)
+        }
+        List<Subscription> subscriptions = Subscription.findAllByTopic(topic)
+        subscriptions.each{sub->
+            sub.delete(failOnError: true,flush: true)
+        }
+        topic.delete(failOnError: true , flush: true)
+        return true
+    }
+
+    boolean changeTopicSeriousness(params,session){
+        Topic topic=Topic.get(params.topicId)
+        if(session.admin || session.username==topic.createdBy.username) {
+            Users user = Users.findByUsername(session.username)
+            Subscription subscription = Subscription.findByTopicAndUser(topic, user)
+            subscription.seriousness = params.topicSeriousness
+            subscription.save(flush: true, failOnError: true)
+            return true
+        } else {
+            return false
+        }
+    }
+
+    boolean changeTopicVisibility(params,session){
+        Topic topic=Topic.get(params.topicId)
+        if(session.admin || session.username==topic.createdBy.username) {
+            topic.visibility = params.topicVisibility
+            topic.save(flush:true,failOnError:true)
+            return true
+        }else{
+            return false
         }
     }
 }

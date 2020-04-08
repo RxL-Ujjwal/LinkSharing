@@ -19,18 +19,24 @@
             crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css2?family=Flamenco&display=swap" rel="stylesheet">
     <asset:stylesheet href="custom.css"/>
-    <asset:javascript src="myscript.js"></asset:javascript>
-    <asset:javascript src="homePage.js.js"></asset:javascript>
+    <asset:javascript src="homePage.js"></asset:javascript>
 
 </head>
 <body>
     <h1>Home Page</h1>
     <g:if test="${flash.message}">
-    <div class="panel animated shake">
-        <div class="panel-body bg-danger text-center">
-            ${flash.message}
+        <div class="panel animated shake">
+            <div class="panel-body bg-success text-center">
+                ${flash.message}
+            </div>
         </div>
-    </div>
+    </g:if>
+    <g:if test="${flash.error}">
+        <div class="panel animated shake">
+            <div class="panel-body bg-danger text-center">
+                ${flash.error}
+            </div>
+        </div>
     </g:if>
 
     <nav class="navbar navbar-expand-sm bg-light rounded mynav">
@@ -43,7 +49,7 @@
 
       <div class="container mycontainer">
           <div class="row">
-              <div class="col-md-6 rounded-top r1c1" style="height: 610px">
+              <div class="col-md-6 rounded-top r1c1" style="height: 390px;overflow-y: scroll">
                   <div>
                       <nav class="navbar navbar-expand-sm bg-secondary mynavl ">
                           <ul class="navbar-nav">
@@ -54,23 +60,23 @@
                       </nav>
 
                 <div>
+
                  <g:each var="u" in="${recentSharesPublicList}">
                      <div class="row">
                           <div class="column">
                               <g:if test="${u.createdBy.photo}">
-                                  <img style="width: 90px;height: 100px;margin-left: 10px;margin-top: 10px"
+                                  <img style="width: 80px;height: 100px;margin-left: 10px;margin-top: 10px"
                                        src="${createLink(controller: 'user', action: 'fetchUserImage',params:['emailId':u.createdBy.email])}"/>
-%{--                                  <asset:image src="xyz.jpg" alt="Myphoto" height="80px" width="80px" style="margin: 10px 5px 10px 10px;"/>--}%
                               </g:if>
                               <g:else>
-                              <asset:image src="xyz.jpg" alt="Myphoto" height="100px" width="90px" style="margin: 10px 5px 10px 10px;"/>
+                              <asset:image src="xyz.jpg" alt="Myphoto" height="100px" width="80px" style="margin: 10px 5px 10px 10px;"/>
                               </g:else>
                           </div>
                           <div class="column">
-                              <div style="height: 50px;width: 450px;">
+                              <div style="height: 50px;width: 450px">
                                   <label style="font-size: 14px;margin: 12px 5px 0px 10px;"><b>${u.createdBy.firstName} ${u.createdBy.lastName}</b></label>
                                   <label style="font-size: 14px;color: gray;margin: 12px 75px 0px 0px;">@${u.createdBy.username}</label>
-%{--                                  margin: 12px 0px 0px 120px--}%
+
                                   <label style="font-size: 12px;position: relative;float: right;margin-top: 12px;right: 10px"><a href=${createLink(controller: "user",action: "dashboard")}>${u.topic.name}</a></label>
                                   <p class="txt" style="margin-top: 0px;">
                                       <u><i><b>${u.description}</b></i></u><br>
@@ -90,7 +96,8 @@
                               </div>
                             </div>
                         </g:each>
-                    </div>
+
+                        </div>
                   </div>
               </div>
               <!-- Login -->
@@ -111,17 +118,15 @@
                       <input type="submit" value="Login" class="sub">
                      </g:form>
 %{--                      <a class="fp" href="/user"><u>Forget Password</u></a>--}%
-                      <div class="col-sm-5">
-                          <a href="#my_modal" data-toggle="modal" class="fp"
-                          >Forget Password
-                          </a>
+                      <div>
+                          <a href="#my_modal" data-toggle="modal" class="fp"><u>Forget Password?</u></a>
                           <g:render template="forgotPassword"></g:render>
                       </div>
               </div>
           </div>
           <div class="row">
 
-            <div class="col-md-6 rounded-top r2c1" style="height: 290px">
+            <div class="col-md-6 rounded-top r2c1" style="height: 290px;overflow-y: scroll">
                 <div>
                     <nav class="navbar navbar-expand-sm bg-secondary mynavl">
                         <ul class="navbar-nav">
@@ -131,23 +136,22 @@
                         </ul>
                       </nav>
 
-                    <g:each var="u" in="${topPosts.take(2)}">
+                    <g:each var="u" in="${topPosts.take(5)}">
                         <div class="row">
                             <div class="column">
                                 <g:if test="${u.user.photo}">
                                     <img style="width: 90px;height: 110px;margin-left: 10px;margin-top: 10px"
                                          src="${createLink(controller: 'user', action: 'fetchUserImage',params:['emailId':u.user.email])}"/>
-                                %{--                                  <asset:image src="xyz.jpg" alt="Myphoto" height="80px" width="80px" style="margin: 10px 5px 10px 10px;"/>--}%
                                 </g:if>
                                 <g:else>
                                     <asset:image src="xyz.jpg" alt="Myphoto" height="110px" width="90px" style="margin: 10px 5px 10px 10px;"/>
                                 </g:else>
                             </div>
                             <div class="column">
-                                <div style="height: 50px;width: 450px;">
+                                <div style="height: 50px;width: 450px;margin-left: -5px">
                                     <label style="font-size: 14px;margin: 12px 5px 0px 10px;"><b>${u.user.firstName} ${u.user.lastName}</b></label>
                                     <label style="font-size: 14px;color: gray;margin: 12px 75px 0px 0px;">@${u.user.username}</label>
-                                    %{--                                  margin: 12px 0px 0px 120px--}%
+
                                     <label style="font-size: 12px;position: relative;float: right;margin-top: 12px;right: 10px"><a href=${createLink(controller: "user",action: "dashboard")}>${u.resource.topic.name}</a></label>
                                     <p class="txt" style="margin-top: 0px;">
                                         <u><i><b>${u.resource.description}</b></i></u><br>
@@ -172,7 +176,7 @@
               </div>
 
 
-              <div class="col-md-4 rounded-top r2c2" style="margin-top: -360px">
+              <div class="col-md-4 rounded-top r2c2" style="position:relative;margin-top:-130px">
                 <div>
                     <nav class="navbar navbar-expand-sm bg-secondary mynavl">
                         <ul class="navbar-nav">
@@ -181,22 +185,35 @@
                           </li>
                         </ul>
                       </nav><br>
-                      <g:uploadForm name="registerform" url="[action:'register',controller:'User']">
+
+                    <div class="panel animated shake" id="regFailed" hidden>
+                        <div class="panel-body bg-danger text-center">
+                            <label id="fail"></label>
+                        </div>
+                    </div>
+
+                    <div class="panel animated shake" id="regSuccess" hidden>
+                        <div class="panel-body bg-success text-center">
+                            <label id="success"></label>
+                        </div>
+                    </div>
+
+                      <g:uploadForm name="registerForm" id="registerForm" controller="user" action="registerUser">
                       <label class="p">First name </label>
-                      <input type="text" name="rfname" ><br><br>
+                      <input type="text" name="rfname" id="rfname" required><br><br>
                       <label class="p">Last name </label>
-                      <input type="text" name="rlname" ><br><br>
+                      <input type="text" name="rlname" id="rlname" required><br><br>
                       <label class="p" style="margin-right: 82px;">Email</label>
-                      <input type="email" name="remail" ><br><br>
+                      <input type="email" name="remail" id="remail" required><br><br>
                       <label class="p">Username </label>
-                      <input type="text" name="runame" ><br><br>
+                      <input type="text" name="runame" id="runame" required><br><br>
                       <label class="p">Password </label>
-                      <input type="password" name="rpassword" id="pass" ><br><br>
+                      <input type="password" name="rpassword" id="rpassword" required><br><br>
                       <label class="e" style="margin-right: -3px;">Confirm Password </label>
-                      <input type="password" name="rcpassword" id="cpass" ><br><br>
+                      <input type="password" name="rcpassword" id="rcpassword" required><br><br>
                       <label style="font-size: 15px;">Photo </label>
-                      <input type="file" name="rphoto" accept="image/*"><br>
-                      <input type="submit" value="Register" class="sub" ><br><br>
+                      <input type="file" name="rphoto" id="rphoto" accept="image/*"><br>
+                      <input type="submit" value="Register" id="submitForm" style="position:relative;float: right;right: 20px"><br><br>
                     </g:uploadForm>
                 </div>
               </div>

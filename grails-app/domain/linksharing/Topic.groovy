@@ -1,7 +1,5 @@
 package linksharing
 
-import javax.servlet.http.HttpSession
-
 class Topic {
     String name
     Users createdBy
@@ -17,7 +15,5 @@ class Topic {
             this.id=id
         }
     }
-    static hasMany = [subscriptions:Subscription,resources:Resource]
-
-
+    static hasMany = [subscriptions:Subscription, resources:Resource]
 }

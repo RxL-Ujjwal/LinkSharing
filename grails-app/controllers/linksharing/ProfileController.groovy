@@ -8,24 +8,24 @@ class ProfileController {
         if (session.email) {
             render(view: "/user/profile", model: profileService.profilePage(session))
         } else {
-            flash.message = "Please Login First"
+            flash.error = "Please Login First"
             redirect(controller: "user")
         }
     }
 
     def subscribe() {
         profileService.subscribe(params, flash)
-        redirect(controller: "profile", action: "index")
+        redirect(controller: "user", action: "dashboard")
     }
 
     def unsubscribe() {
         profileService.unsubscribe(params, flash)
-        redirect(controller: "profile", action: "index")
+        redirect(controller: "user", action: "dashboard")
     }
 
     def changeDetailsOfUser() {
         profileService.changeDetailsOfUser(params, session, flash)
-        redirect(controller: "user", action: "dashboard")
+        redirect(controller: "profile", action: "index")
 
     }
 
@@ -39,7 +39,7 @@ class ProfileController {
         if (session.getAttribute("firstname")) {
             render(view: "userProfile", model: profileService.userProfile(session))
         } else {
-            flash.message = "Please Login First"
+            flash.error = "Please Login First"
             redirect(controller: "user")
         }
     }

@@ -3,6 +3,7 @@
 <g:set var="username" value="${session.getAttribute("username")}"></g:set>
 <g:set var="email" value="${session.getAttribute("email")}"></g:set>
 <g:set var="photo" value="${session.getAttribute("photo")}"></g:set>
+<g:set var="userId" value="${session.getAttribute("userId")}"></g:set>
 
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/html">
@@ -89,15 +90,14 @@
                     </div>
 
                     <div class="column" style="margin-left: 10px">
-                        <label style="font-size: 14px;margin: 10px 10px 5px 5px;color: gray;"><a href="topicshow.html" style="margin-right: 5px;"><u>${topic.name}</u></a>(${topic.visibility.name()})</label>
+                        <label style="font-size: 14px;margin: 10px 10px 5px 5px;color: gray;"><a href="#" style="margin-right: 5px;"><u>${topic.name}</u></a>(${topic.visibility.name()})</label>
                         <br>
                         <label style="font-size: 14px;margin: 0px 30px 5px 5px;color: gray;">@${topic.createdBy.username}</label>
                         <label style="font-size: 14px;margin: 0px 10px 5px 30px;color: gray;">Subscriptions</label>
                         <label style="font-size: 14px;margin: 0px 10px 5px 10px;color: gray;">Post</label><br>
-                        <a href="${createLink(controller: "subscription", action: "subscribe", params: [topicname: topic.name, email: email])}"
-                                               style="margin: 0px 30px 5px 5px;font-size: 13px;"><u>Subscribe</u></a>
-                        <label style="font-size: 14px;position: relative;float:right;color:blue;right: 100px">${subscribedUsersOfThisTopic.size()}</label>
-                        <label style="font-size: 14px;position: relative;float:right;color:blue;right: 15px">${postsRelatedToThisTopic.size()}</label>
+                        <label style="margin: 0px 30px 5px 5px;font-size: 13px;"><u><ls:showSubscribe userId="${userId}" topicId="${topic.id}"></ls:showSubscribe></u></label>
+                        <label style="font-size: 14px;position: relative;float:right;color:blue;right: 100px"><ls:subscriptionCount topicId="${topic.id}"></ls:subscriptionCount> </label>
+                        <label style="font-size: 14px;position: relative;float:right;color:blue;right: 15px"><ls:postCount topicId="${topic.id}"></ls:postCount> </label>
                     </div>
 
                 </div>

@@ -19,6 +19,7 @@ class ResourceController {
 
     def download(){
         DocumentResource documentResource = DocumentResource.get(params.docResourceId)
+        println(params.docResouceId+"********")
         File file = new File(documentResource.filepath)
         byte[] orderPDF = file.bytes
         response.setHeader("Content-disposition","attachment;filename = "+file.name)

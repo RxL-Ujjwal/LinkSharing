@@ -10,7 +10,7 @@ class LogoutController {
             session.invalidate()
             flash.message = "Logout Successful"
         }else{
-            flash.message = "Please Login again"
+            flash.error = "Please Login again"
         }
         redirect(controller:"user")
     }

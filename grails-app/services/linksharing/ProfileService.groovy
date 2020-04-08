@@ -34,7 +34,7 @@ class ProfileService {
         Users user = Users.findByEmail(params.email)
         Topic topic = Topic.findByCreatedByAndName(user, params.topicname)
         if (topic.createdBy == user) {
-            flash.message = "You cannot unsubscribe this topic"
+            flash.message = "You cannot unsubscribe your own Topic"
         } else {
             Subscription sub = Subscription.findByUsersAndTopic(user, topic)
             sub.delete(failOnError: true, flush: true)
@@ -74,11 +74,11 @@ class ProfileService {
     }
 
     def userProfile(session) {
-        Users usr = Users.findByEmail(session.getAttribute("email"))
+        Users user = Users.findByEmail(session.getAttribute("email"))
 
-        List<Subscription> subscribedTopicsListOfUser = Subscription.findAllByUser(usr)
-        List<Resource> resourcesCreatedByUser = Resource.findAllByCreatedBy(usr)
-        List<Topic> topicsCreatedByUser = Topic.findAllByCreatedBy(usr)
+        List<Subscription> subscribedTopicsListOfUser = Subscription.findAllByUser(user)
+        List<Resource> resourcesCreatedByUser = Resource.findAllByCreatedBy(user)
+        List<Topic> topicsCreatedByUser = Topic.findAllByCreatedBy(user)
 
         return ([subscribedTopicsListOfUser: subscribedTopicsListOfUser,
                  topicsCreatedByUser       : topicsCreatedByUser, resourcesCreatedByUser: resourcesCreatedByUser])
