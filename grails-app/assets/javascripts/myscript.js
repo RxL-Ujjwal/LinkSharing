@@ -108,22 +108,19 @@ var deleteTopic = function(trashId){
         data:{"topicId" : trashId},
         success: function (data) {
             if(data.success  ==  true){
-                // alert("Delete Success")
-                $('#info').html("Delete Success").fadeOut(3000);
+                $('#info').html("You have deleted the Topic Successfully").fadeOut(3000);
                 setTimeout(function(){
                     location.reload();
                 }, 1000);
             }else{
-                // alert("Delete failed")
-                $('#info').html("Delete Failed").fadeOut(3000);
+                $('#info').html("Sorry Topic has not been deleted").fadeOut(3000);
                 setTimeout(function(){
                     location.reload();
                 }, 1000);
             }
         },
         error: function () {
-            // alert("Delete Failed Badly")
-            $('#info').html("Delete Failed Badly").fadeOut(3000);
+            $('#info').html("Something went wrong while deleting the Topic").fadeOut(3000);
             setTimeout(function(){
                 location.reload();
             }, 1000);
@@ -310,6 +307,41 @@ $(document).ready(function(){
 });
 
 
+var deletePost = function(trashId){
+    $.ajax({
+        url: "/resource/deletePost/",
+        type: "POST",
+        data:{"postId" : trashId},
+        success: function (data) {
+            if(data.success  ==  true){
+                $('#postMessg').html("You have deleted the Post Successfully").fadeOut(3000);
+                setTimeout(function(){
+                    location.reload();
+                }, 1000);
+            }else{
+                $('#postMessg').html("Sorry Post has not been deleted").fadeOut(3000);
+                setTimeout(function(){
+                    location.reload();
+                }, 1000);
+            }
+        },
+        error: function () {
+            $('#postMessg').html("Something went wrong while deleting the post").fadeOut(3000);
+            setTimeout(function(){
+                location.reload();
+            }, 1000);
+        }
+    });
+};
+
+$(document).ready(function () {
+    $("#postDiv").hide()
+    $(".deleteResource").click(function () {
+        $('#postDiv').show()
+        var trashId = $(this).attr('trashId');
+        deletePost (trashId)
+    });
+});
 
 
 

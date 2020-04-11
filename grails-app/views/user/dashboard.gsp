@@ -45,11 +45,11 @@
     </div>
 </g:if>
 
-<div class="panel animated shake" id="infoDiv">
-    <div class="panel-body bg-info text-center">
-        <label id="info"></label>
+    <div class="panel animated shake" id="infoDiv">
+        <div class="panel-body bg-info text-center">
+            <label id="info"></label>
+        </div>
     </div>
-</div>
 
 <nav class="navbar navbar-expand-sm bg-light rounded mynav" style="height: 70px">
     <ul class="navbar-nav">

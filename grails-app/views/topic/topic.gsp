@@ -16,9 +16,12 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Flamenco&display=swap" rel="stylesheet">
+    <script src="https://use.fontawesome.com/a81c0d9f01.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
     <asset:stylesheet href="custom.css"/>
+    <asset:javascript src="myscript.js"/>
 </head>
 
 <body style="height: 100vh;">
@@ -31,6 +34,12 @@
         </div>
     </div>
 </g:if>
+
+<div class="panel animated shake" id="postDiv">
+    <div class="panel-body bg-info text-center">
+        <label id="postMessg"></label>
+    </div>
+</div>
 
 <nav class="navbar navbar-expand-sm bg-light rounded mynav">
     <ul class="navbar-nav">
@@ -72,7 +81,7 @@
                 <nav class="navbar navbar-expand-sm bg-secondary mynavl">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <b class="ls e">Topic:"${topic.name}"</b>
+                            <b class="ls e">Topic : "${topic.name}"</b>
                         </li>
                     </ul>
                 </nav>
@@ -109,7 +118,7 @@
                 <nav class="navbar navbar-expand-sm bg-secondary mynavl">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <b class="ls e">Topic:"${topic.name}"</b>
+                            <b class="ls e">Topic : "${topic.name}"</b>
                         </li>
                     </ul>
                 </nav>
@@ -130,6 +139,14 @@
                             <div style="height: 50px;width: 450px;">
                                 <label style="font-size: 14px;margin: 12px 10px 0px 10px;"><b>${r.createdBy.firstName} ${r.createdBy.lastName}</b>
                                 </label>
+
+
+                                <g:if test="${r.createdBy.username==session.username}">
+                                    <i class="fa fa-trash fa-lg deleteResource" id="delete" trashId="${r.id}" aria-hidden="true"
+                                       style="color:black; position: relative;left: 300px;font-size: 20px;cursor: pointer"
+                                       ;></i>
+                                </g:if>
+
 
                                 <p class="txt" style="margin-top: 0px;">
                                     <u><i><b>${r.description}</b></i></u><br>
@@ -171,7 +188,7 @@
                 <nav class="navbar navbar-expand-sm bg-secondary mynavl">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <b class="ls e">Users:"${topic.name}"</b>
+                            <b class="ls e">Users : "${topic.name}"</b>
                         </li>
                     </ul>
                 </nav>

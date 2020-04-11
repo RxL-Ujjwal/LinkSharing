@@ -19,7 +19,6 @@ class ResourceController {
 
     def download(){
         DocumentResource documentResource = DocumentResource.get(params.docResourceId)
-        println(params.docResouceId+"********")
         File file = new File(documentResource.filepath)
         byte[] orderPDF = file.bytes
         response.setHeader("Content-disposition","attachment;filename = "+file.name)
@@ -28,5 +27,20 @@ class ResourceController {
         response.outputStream<<orderPDF
         response.outputStream.flush()
         response.outputStream.close()
+    }
+
+    def deletePost(){
+        Resource resource = Resource.findById(params.postId)
+        println params.postId
+        List<ReadingItem> readingItems = ReadingItem.findAllByResource(resource)
+        readingItems.each { items ->
+            items.delete(failOnError: true, flush: true)
+        }
+        List<ResourceRating> resourceRatings = ResourceRating.findAllByResource(resource)
+        resourceRatings.each { rr ->
+            rr.delete(failOnError: true, flush: true)
+        }
+        resource.delete(flush:true,failOnError: true)
+        render([success:true] as JSON)
     }
 }
