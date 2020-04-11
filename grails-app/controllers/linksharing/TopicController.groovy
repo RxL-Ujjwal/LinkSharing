@@ -17,8 +17,13 @@ class TopicController {
     def topicPage() {
 
         if (session.getAttribute("firstname")) {
-            Map model = topicService.topicPage(params)
-            render(view: "topic", model: model)
+            Map model = topicService.topicPage(params,session,flash)
+            if(model) {
+                render(view: "topic", model: model)
+            }else{
+                //flash.error = "Sorry the Topic is Private"
+                redirect(controller: "user",action: "dashboard")
+            }
         } else {
             flash.error = "Please Login First"
             redirect(controller: "user")
@@ -29,21 +34,15 @@ class TopicController {
         render([success:topicService.delete(params)] as JSON)
     }
 
-    def invite() {
-        sendMail {
-            to params.address
-            subject params.subject
-            text params.body
-        }
-        flash.message = "Message sent to " + params.address + " at " + new Date()
-        redirect action: "show"
-    }
-
     def changeTopicSeriousness(){
         render([success:topicService.changeTopicSeriousness(params,session)] as JSON)
     }
 
     def changeTopicVisibility(){
         render([success:topicService.changeTopicVisibility(params,session)] as JSON)
+    }
+
+    def changeTopicName() {
+        render([success:topicService.changeTopicName(params,session)] as JSON)
     }
 }

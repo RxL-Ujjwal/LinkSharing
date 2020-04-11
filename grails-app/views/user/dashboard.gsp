@@ -51,23 +51,30 @@
     </div>
 </div>
 
-<nav class="navbar navbar-expand-sm bg-light rounded mynav">
+<nav class="navbar navbar-expand-sm bg-light rounded mynav" style="height: 70px">
     <ul class="navbar-nav">
         <li class="nav-item">
-            <a class="nav-link" href="#"><u class="ls">Link Sharing</u></a>
+            <a class="nav-link" href="#" style="position: relative;top:15px"><u class="ls">Link Sharing</u></a>
         </li>
-        <li class="nav-item">
+        <li>
+            <g:form url="[controller: 'readingItem',action: 'searchPage']">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"
+                       name="searchText" id="searchText" autocomplete="off" style="width: auto;position: relative;top:16px;left: 451px">
+                <button class="btn btn-secondary my-2 my-sm-0" type="submit" id="button" style="float: right;position: relative;left: 538px;bottom: 22px">Search</button>
+            </g:form>
+        </li>
+        <li class="nav-item" style="position:relative;left: 499px;top:11px">
             <g:if test="${photo}">
             <a href=${createLink(controller: "profile",action: "userProfile")}>
-                <img style="margin-top:5px;width: 40px;height: 40px;margin-left: 800px" ;
+                <img style="margin-top:5px;width: 40px;height: 40px;margin-left: 80px" ;
                      src="data:image/jpg;base64,${photo}"/></a>
             </g:if>
             <g:else>
             <a href = ${createLink(controller:"profile",action:"userProfile")}><asset:image src="xyz.jpg" alt="Myphoto" height="40px" width="40px"
-                                                                                            style="margin: 0px 0px 0px 790px;"/></a>
+                                                                                            style="margin: 0px 0px 0px 79px;"/></a>
             </g:else>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" style="position: relative;left:496px;top:14px">
             <div class="dropdown" style="margin: 5px 5px 0px 5px;">
                 <button class="btn btn-light dropdown-toggle" type="button" data-toggle="dropdown">${firstname}
                     <span class="caret"></span></button>
@@ -124,9 +131,9 @@
             <g:each in="${resourceListForInbox.take(2)}" var="r">
                 <div class="row">
                     <div class="column">
-                        <g:if test="${r.user.photo}">
+                        <g:if test="${r.resource.createdBy.photo}">
                         <img style="width: 100px;height: 110px;margin-left: 30px;margin-top: 10px"
-                             src="${createLink(controller: 'user', action: 'fetchUserImage',params:['emailId':r.user.email])}"/>
+                             src="${createLink(controller: 'user', action: 'fetchUserImage',params:['emailId':r.resource.createdBy.email])}"/>
                         </g:if>
                         <g:else>
                             <asset:image src="xyz.jpg" alt="Myphoto" height="110px" width="100px" style="margin: 10px 5px 10px 30px;"/>
@@ -135,9 +142,9 @@
 
                     <div class="column" style="margin-left: 20px">
                     <div style="height: 50px;width: 450px;">
-                        <label style="font-size: 14px;margin: 12px 10px 0px 10px;"><b>${r.user.firstName} ${r.user.lastName}</b>
+                        <label style="font-size: 14px;margin: 12px 10px 0px 10px;"><b>${r.resource.createdBy.firstName} ${r.resource.createdBy.lastName}</b>
                         </label>
-                        <label style="font-size: 14px;color: gray;position: relative;">@${r.user.username}</label>
+                        <label style="font-size: 14px;color: gray;position: relative;">@${r.resource.createdBy.username}</label>
                         <label style="font-size: 12px;position: relative;float: right;margin-top: 12px;right: 10px"><a href="${createLink(controller: "topic",action: "topicPage",params: ['topicId':r.resource.topic.id])}">${r.resource.topic.name}</a></label>
 
                         <p class="txt" style="margin-top: 0px;">
@@ -164,7 +171,7 @@
 
 %{--                        <label style="margin: 0px 5px 5px 0px;font-size: 12px;" id="mar"><u><ls:markAsRead userId="${userId}" resourceId="${r.id}"></ls:markAsRead></u></label>--}%
 
-                        <a href="${createLink(controller: "readingItem",action: "isRead",params:['resourceId':r.resource.id])}" style="margin: 0px 5px 5px 5px;font-size: 12px;" id="mar"><u>Mark as read</u></a>
+                        <a href="${createLink(controller: "user",action: "dashboard")}" class="markAsRead" resourceId="${r.resource.id}" style="margin: 0px 5px 5px 5px;font-size: 12px;"><u>Mark as read</u></a>
 
                         <a href="${createLink(controller: "user",action: "postShow",params: ['resourceId':r.resource.id])}" style="margin: 0px 0px 5px 5px;font-size: 12px;"><u>View post</u></a>
                     </div>
@@ -313,15 +320,12 @@
                     </div>
 
                     <div class="modal-body">
-                        <g:form controller="emailSender" action="send">
+                        <g:form>
                             <label style="margin-right: 55px;">Email</label>
                             <input type="email" name="address" id="email"><br>
-                            <label style="margin-right: 40px;">Subject</label>
-                            <input type="text" name="subject" id="sub"><br>
-                            <label style="margin-right: 55px;">Body</label>
-                            <g:textArea name="body" id="body" placeholder="Body"></g:textArea><br>
+                            <g:select name="topicSelect" from="${subscribedTopicsListOfUser.topic.name}" class="topicSelect"/><br>
                         %{--                            <g:select name="emailTopic" from="${linksharing.Topic.list().name}" id="topice"/><br>--}%
-                            <input type="Submit" style="float: right;position: relative;right:180px;" value="Invite">
+                            <input type="Submit" id='inviteButton' style="float: right;position: relative;right:180px;bottom: 20px" value="Invite">
                         </g:form>
                     </div>
 

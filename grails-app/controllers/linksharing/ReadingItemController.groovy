@@ -4,17 +4,37 @@ import grails.converters.JSON
 
 class ReadingItemController {
 
-    def index() { }
+    ReadingItemService readingItemService
 
-    def isRead(){
+    def index() {}
 
-        Users usr = Users.get(session.userId)
-        Resource resource = Resource.get(params.resourceId)
-        ReadingItem readingItem = ReadingItem.findByResourceAndUser(resource,usr)
-        if (readingItem) {
-            readingItem.isRead = true
-            readingItem.save(flush: true)
+    def isRead(session, params) {
+        render([success: readingItemService.isRead(session, params)] as JSON)
+    }
+
+    def searchPage() {
+
+        if (session.getAttribute("firstname")) {
+            List<Resource> trendingTopicsList = Resource.createCriteria().list(max: 5) {
+                projections {
+                    count("id", "t")
+                }
+                groupProperty("topic")
+                order("t", "desc")
+            }
+
+            List<ResourceRating> topPosts = ResourceRating.createCriteria().list(max: 5) {
+                order "score", "desc"
+            }
+
+            List<Topic> topics = Topic.findAllByNameIlike(params.searchText) ?: []
+            List<Resource> resources = Resource.findAllByDescriptionIlike(params.searchText)?: []
+
+            render(view: "search", model: [topPosts          : topPosts, resources: resources,topics : topics,
+                                           trendingTopicsList: trendingTopicsList])
+        } else {
+            flash.error = "Please Login First"
+            redirect(controller: "user")
         }
-        redirect(controller:"user",action:"dashboard")
     }
 }

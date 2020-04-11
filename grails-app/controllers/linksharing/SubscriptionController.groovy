@@ -10,6 +10,7 @@ import static org.springframework.http.HttpStatus.*
 class SubscriptionController {
 
     SubscriptionService subscriptionService
+    ResourceService resourceService
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
@@ -37,7 +38,7 @@ class SubscriptionController {
 
     def trendingTopicsList() {
         if (session.getAttribute("firstname")) {
-            Map model =  subscriptionService.trendingTopicsList(session)
+            Map model =  resourceService.trendingTopicsList(session)
             render(view: "trendingTopics", model: model)
         } else {
             flash.error = "Please Login First"

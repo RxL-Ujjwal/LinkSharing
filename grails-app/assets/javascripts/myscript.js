@@ -169,7 +169,6 @@ $(document).ready(function(){
         $('#infoDiv').show()
         var topicId = $(this).attr('topicId');
         var topicSeriousness = $(this).val();
-        console.log(topicId + " "+ topicSeriousness);
         changeTopicSeriousness(topicId,topicSeriousness)
     });
     $('.seriousness').select(topicSeriousness);
@@ -206,10 +205,111 @@ $(document).ready(function(){
         $('#infoDiv').show()
         var topicId = $(this).attr('topicId')
         var topicVisibility = $(this).val()
-        console.log(topicId+" "+topicVisibility)
         changeTopicVisibility(topicId,topicVisibility)
     });
 });
+
+var markAsReadPost=function (resourceId) {
+    $.ajax({
+        url:"/readingItem/isRead",
+        type:"POST",
+        data:{"resourceId":resourceId},
+        success:function(data){
+            if(data.success==true){
+                //$('#info').html("Your Choice has been Locked").fadeOut(3000);
+                setTimeout(function(){
+                    location.reload();
+                }, 1000);
+            }
+            else{
+                //$('#info').html("Sorry your choice has not been locked").fadeOut(3000);
+                setTimeout(function(){
+                    location.reload();
+                }, 1000);
+            }
+        },
+    });
+};
+
+$(document).ready(function(){
+    $('#infoDiv').hide()
+    $('.markAsRead').click(function(){
+        console.log("inside")
+        $('#infoDiv').show()
+        var resourceId = $(this).attr('resourceId')
+        console.log(resourceId)
+        markAsReadPost(resourceId);
+    });
+});
+
+var changeTopicName=function (topicId,topicName) {
+    $.ajax({
+        url:"/topic/changeTopicName",
+        type:"POST",
+        data:{"topicId":topicId,"topicName":topicName},
+        success:function(data){
+            if(data.success==true){
+                $('#info').html("TopicName Changed").fadeOut(3000);
+                setTimeout(function(){
+                    location.reload();
+                }, 1000);
+            }
+            else{
+                $('#info').html("Changed request Fail").fadeOut(3000);
+                setTimeout(function(){
+                    location.reload();
+                }, 1000);
+            }
+        },
+    });
+
+};
+
+$(document).ready(function(){
+    $('.topicEdit').click(function() {
+        $('.changeOwner').attr('hidden', false)
+        $('.topicName').attr('hidden', false)
+    });
+        $('.changeOwner').click(function () {
+            var topicId = $(this).attr('topicId')
+            var topicName = $('.topicName').val()
+            console.log(topicId+" "+topicName)
+            changeTopicName(topicId,topicName)
+        });
+        $('.changeOwner').attr('hidden',true)
+    });
+
+
+var sendInvite = function(topicName){
+    $.ajax({
+        url: "/emailSender/sendInvite/",
+        type: "POST",
+        data:{"address": $("#email").val() ,"topicName":topicName},
+        success: function (/*data*/) {
+            $('#info').html("Message Sent").fadeOut(3000);
+            setTimeout(function(){
+                location.reload();
+            }, 1000);
+        },
+        error: function () {
+            $('#info').html("Error Occured").fadeOut(3000);
+            setTimeout(function(){
+                location.reload();
+            }, 1000);
+        }
+    });
+};
+
+$(document).ready(function(){
+    $('#infoDiv').hide()
+    $('#inviteButton').click(function () {
+        $('#infoDiv').show()
+        var topicName = $('.topicSelect').val()
+        sendInvite(topicName);
+    });
+});
+
+
 
 
 

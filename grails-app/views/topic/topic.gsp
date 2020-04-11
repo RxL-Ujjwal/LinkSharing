@@ -84,12 +84,12 @@
                                  src="${createLink(controller: 'user', action: 'fetchUserImage',params:['emailId':topic.createdBy.email])}"/>
                         </g:if>
                         <g:else>
-                            <asset:image src="xyz.jpg" alt="Myphoto" height="90px" width="80px" style="margin: 10px 5px 10px 10px;"/>
+                            <asset:image src="xyz.jpg" alt="Myphoto" height="90px" width="70px" style="margin: 10px 5px 10px 10px;"/>
                         </g:else>
 
                     </div>
 
-                    <div class="column" style="margin-left: 10px">
+                    <div class="column">
                         <label style="font-size: 14px;margin: 10px 10px 5px 5px;color: gray;"><a href="#" style="margin-right: 5px;"><u>${topic.name}</u></a>(${topic.visibility.name()})</label>
                         <br>
                         <label style="font-size: 14px;margin: 0px 30px 5px 5px;color: gray;">@${topic.createdBy.username}</label>

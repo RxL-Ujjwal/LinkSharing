@@ -29,4 +29,15 @@ class ResourceService {
         flash.message="Document resource added"
         return true
     }
+
+    Map trendingTopicsList(session) {
+        List<Resource> trendingTopicsList = Resource.createCriteria().list {
+            projections {
+                count("id", "postCount")
+            }
+            groupProperty("topic")
+            order("postCount", "desc")
+        }
+        return([trendingTopicsList: trendingTopicsList])
+    }
 }

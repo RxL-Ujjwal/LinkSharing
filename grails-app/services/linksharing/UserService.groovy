@@ -8,29 +8,29 @@ class UserService {
     def serviceMethod() {}
 
     //Register User in the Database
-    def registerUser(params, flash) {
+    String registerUser(params,flash) {
         Users userByEmail = Users.findByEmail(params.remail)
         Users userByUsername = Users.findByUsername(params.runame)
         String result
         if (userByEmail != null && userByUsername != null) {
-            flash.error = "Email and Username both existed"
+            result = "Email and Username both existed"
         } else {
             if (userByEmail != null) {
-                flash.error = "Email existed"
+                result = "Email existed"
             } else {
                 if (userByUsername != null) {
-                    flash.error = "Username existed"
+                    result = "Username existed"
                 } else {
                     Users usr = new Users(email: params.remail, username: params.runame, password: params.rpassword, firstName: params.rfname, lastName: params.rlname, admin: false, active: true, photo: params.rphoto.bytes)
                     usr.save(flush: true, failOnError: true)
-                    flash.message = "Registration Successful"
+                    result = "Registration Successful"
                 }
             }
         }
     }
 
 //User Logged in and switch to dashboard
-    def loginUser(params) {
+    Users loginUser(params) {
         Users loggedInUser = Users.findByEmailAndPassword(params.logemail, params.logpassword)
         if (loggedInUser == null) {
             Users logInUser = Users.findByUsernameAndPassword(params.logemail, params.logpassword)
@@ -79,11 +79,12 @@ class UserService {
                 ne("createdBy.id", user.id)
             }
         }
-        List<ReadingItem> readingItems
+        List<ReadingItem> readingItems = []
         if (resources) {
             readingItems = ReadingItem.createCriteria().list() {
                 eq("isRead", false)
                 'in'("resource.id", resources?.id)
+                eq("user.id",user.id)
             }
         }
         return [subscribedTopicsListOfUser: subscribedTopicsListOfUser,

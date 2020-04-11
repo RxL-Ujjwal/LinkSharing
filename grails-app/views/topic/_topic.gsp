@@ -12,13 +12,15 @@
     </div>
 
     <div class="column" style="margin-left: 0px;">
-        <label style="font-size: 14px;margin: 10px 10px 5px 5px;color: gray;"><a href="/topic" style="margin-right: 10px;"><u>${topic.name}</u></a></label>
+        <label style="font-size: 14px;margin: 10px 10px 5px 5px;color: gray;"><a href="${createLink(controller: "topic",action:"topicPage",params:['topicId':topic.id])}" style="margin-right: 10px;"><u>${topic.name}</u></a></label>
+
         <g:if test="${topic.createdBy.id == session.userId}">
-            <input type="button" value="Change" class="changeOwner" style="position:relative;left:180px;margin-top: 5px">
+
+            <input type="text" class="topicName" hidden style="position:relative;left:10px;margin-top: 5px;width: 139px">
+            <input type="button" value="Change" topicId="${topic.id}" class="changeOwner" hidden style="position:relative;left:10px;margin-top: 5px;">
+
         </g:if>
-        <g:else>
-            <input type="button" value="Change" class="changeNotOwner"  style="position:relative;left:155px;margin-top: 5px">
-        </g:else>
+
         <br>
         <label style="font-size: 14px;margin: 0px 30px 5px 5px;color: gray;">@${topic.createdBy.username}</label>
         <label style="font-size: 14px;margin: 0px 0px 5px 60px;color: gray;">Subscriptions</label>
@@ -29,18 +31,14 @@
         <label style="font-size: 14px;position: relative;float:right;color:blue;right: 110px"><ls:subscriptionCount userId="${topic.createdBy.id}"></ls:subscriptionCount></label>
         <label style="font-size: 14px;position: relative;float:right;color: blue;right: 15px"><ls:postCount topicId="${topic.id}">   </ls:postCount> </label><br>
 
-        <select class="seriousness" name="seriousness" topicId="${topic.id}" style="margin-left: 5px">
-            <option value="Serious">Serious</option>
-            <option value="Casual">Casual</option>
-            <option value="VerySerious">VerySerious</option>
-        </select>
+
+        <g:select name="seriousness" class="seriousness" from="['Serious','Casual','VerySerious']" topicId="${topic.id}"
+                  value="${linksharing.Subscription.findByUserAndTopic(linksharing.Users.get(session.userId),topic)?.seriousness}" style="margin-left: 5px"></g:select>
 
         <g:if test="${topic.createdBy.id == session.userId}">
 
-            <select class="visibility" name="visibility" topicId="${topic.id}" style="margin-left: 5px">
-                <option value="Public">Public</option>
-                <option value="Private">Private</option>
-            </select>
+            <g:select name="visibility" class="visibility" from="['Public','Private']" topicId="${topic.id}"
+                      value="${linksharing.Topic.findByCreatedByAndId(linksharing.Users.get(session.userId),topic.id)?.visibility}" style="margin-left: 5px"></g:select>
 
             <div class="col" style="display: contents">
 
@@ -104,7 +102,7 @@
                     </div>
                 </div>
                 <i style="cursor: pointer;color: black ;font-size: 20px;position:relative;left:10px"
-                   class="fa fa-pencil-square-o fa-lg topicEdit" topicId="${topic.id}"></i>
+                   class="fa fa-pencil-square-o fa-lg topicEdit"></i>
                 <i class="fa fa-trash fa-lg delete" id="delete" trashId="${topic.id}" aria-hidden="true"
                    style="color:black; position: relative;left: 20px;font-size: 20px;cursor: pointer"
                    ;></i>

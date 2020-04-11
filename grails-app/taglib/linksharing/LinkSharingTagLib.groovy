@@ -38,4 +38,10 @@ class LinkSharingTagLib {
         String text = isSubscribed ? "unsubscribe" : "subscribe"
         out << "<a href =${createLink(controller: "subscription", action: action, params: [topicId: attributes.topicId])}>${text}</a>"
     }
+
+    def showSubscribedTopics = { Map attributes ->
+        Users user = Users.get(attributes.userId)
+        List<Topic> subscribedTopics = Subscription.findAllByUser(user)?.topic
+        out << select(from:subscribedTopics ,  optionKey:"id", optionValue:"name", name:"linkTopic")
+    }
 }

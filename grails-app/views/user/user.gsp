@@ -8,9 +8,6 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
-%{--    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"--}%
-%{--            integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"--}%
-%{--            crossorigin="anonymous"></script>--}%
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
             integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
             crossorigin="anonymous"></script>
@@ -115,7 +112,8 @@
                       <input type="text" name="logemail" ><br><br>
                       <label class="p">Password </label>
                       <input type="password" name="logpassword" ><br>
-                      <input type="submit" value="Login" class="sub">
+                          <button type="submit" class="btn btn-primary" style="position: relative;left: 260px">Login</button>
+%{--                      <input type="submit" value="Login" class="sub">--}%
                      </g:form>
 %{--                      <a class="fp" href="/user"><u>Forget Password</u></a>--}%
                       <div>
@@ -139,9 +137,9 @@
                     <g:each var="u" in="${topPosts.take(5)}">
                         <div class="row">
                             <div class="column">
-                                <g:if test="${u.user.photo}">
+                                <g:if test="${u.resource.createdBy.photo}">
                                     <img style="width: 90px;height: 110px;margin-left: 10px;margin-top: 10px"
-                                         src="${createLink(controller: 'user', action: 'fetchUserImage',params:['emailId':u.user.email])}"/>
+                                         src="${createLink(controller: 'user', action: 'fetchUserImage',params:['emailId':u.resource.createdBy.email])}"/>
                                 </g:if>
                                 <g:else>
                                     <asset:image src="xyz.jpg" alt="Myphoto" height="110px" width="90px" style="margin: 10px 5px 10px 10px;"/>
@@ -149,8 +147,8 @@
                             </div>
                             <div class="column">
                                 <div style="height: 50px;width: 450px;margin-left: -5px">
-                                    <label style="font-size: 14px;margin: 12px 5px 0px 10px;"><b>${u.user.firstName} ${u.user.lastName}</b></label>
-                                    <label style="font-size: 14px;color: gray;margin: 12px 75px 0px 0px;">@${u.user.username}</label>
+                                    <label style="font-size: 14px;margin: 12px 5px 0px 10px;"><b>${u.resource.createdBy.firstName} ${u.resource.createdBy.lastName}</b></label>
+                                    <label style="font-size: 14px;color: gray;margin: 12px 75px 0px 0px;">@${u.resource.createdBy.username}</label>
 
                                     <label style="font-size: 12px;position: relative;float: right;margin-top: 12px;right: 10px"><a href=${createLink(controller: "user",action: "dashboard")}>${u.resource.topic.name}</a></label>
                                     <p class="txt" style="margin-top: 0px;">
@@ -184,21 +182,21 @@
                              <b class="ls">Register</b>
                           </li>
                         </ul>
-                      </nav><br>
+                      </nav>
 
-                    <div class="panel animated shake" id="regFailed" hidden>
+                    <div class="panel animated shake" id="regFailed" hidden style="margin: 10px 0px 0px 0px">
                         <div class="panel-body bg-danger text-center">
-                            <label id="fail"></label>
+                            <label id="failMessg"></label>
                         </div>
                     </div>
 
-                    <div class="panel animated shake" id="regSuccess" hidden>
+                    <div class="panel animated shake" id="regSuccess" hidden style="margin: 10px 0px 0px 0px">
                         <div class="panel-body bg-success text-center">
-                            <label id="success"></label>
+                            <label id="successMessg"></label>
                         </div>
-                    </div>
+                    </div><br>
 
-                      <g:uploadForm name="registerForm" id="registerForm" controller="user" action="registerUser">
+                      <g:uploadForm name="registerForm">
                       <label class="p">First name </label>
                       <input type="text" name="rfname" id="rfname" required><br><br>
                       <label class="p">Last name </label>
@@ -213,7 +211,7 @@
                       <input type="password" name="rcpassword" id="rcpassword" required><br><br>
                       <label style="font-size: 15px;">Photo </label>
                       <input type="file" name="rphoto" id="rphoto" accept="image/*"><br>
-                      <input type="submit" value="Register" id="submitForm" style="position:relative;float: right;right: 20px"><br><br>
+                     <button type="button" class="btn btn-success" id="submitForm" style="position:relative;float: right;right: 20px">Register</button>
                     </g:uploadForm>
                 </div>
               </div>

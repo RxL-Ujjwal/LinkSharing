@@ -15,8 +15,8 @@ class UserController {
     }
 
     def registerUser() {
-        userService.registerUser(params,flash)
-        redirect(controller: "user")
+        String rslt = userService.registerUser(params,flash)
+        render([success:rslt] as JSON)
     }
 
     def dashboard() {
@@ -112,12 +112,13 @@ class UserController {
 
     def changePassword(){
         Users user = Users.findById(params.userId)
-        if(user){
+        if(user && params.password==params.confirmPassword){
             user.password = params.password
             user.save(flush:true , failOnError:true)
-            return([success:true] as JSON)
+            render([success:true] as JSON)
+        } else {
+            render([success: false] as JSON)
         }
-        render([success:false] as JSON)
     }
 
     def forgotPassword() {

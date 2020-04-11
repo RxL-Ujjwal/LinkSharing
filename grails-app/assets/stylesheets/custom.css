@@ -80,7 +80,7 @@ h1 {
     margin: 0px 20px 5px 2rem;
     padding: 15px;
     border: 1px solid black;
-    height: 500px;
+    height: 515px;
     width: 300px;
 }
 
@@ -95,7 +95,8 @@ h1 {
     font-size: 15px;
     margin-left: 15px;
     margin-top: 20px;
-
+    bottom: 30px;
+    position: relative;
 }
 
 .e {
