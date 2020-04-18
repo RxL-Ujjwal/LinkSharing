@@ -1,103 +1,48 @@
 package linksharing
 
-import grails.validation.ValidationException
-import static org.springframework.http.HttpStatus.*
+import grails.converters.JSON
 
 class TopicController {
 
     TopicService topicService
 
-    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"  ]
+    static allowedMethods = [save: "POST", update: "PUT"]
 
-    def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        respond topicService.list(params), model:[topicCount: topicService.count()]
-    }
-    static defaultAction = "myAction"
-    def myAction(){
-        render(view: "topic")
-    }
+    def index() {}
 
-    def show(Long id) {
-        respond topicService.get(id)
-    }
-
-    def create() {
-        respond new Topic(params)
-    }
-
-    def save(Topic topic) {
-        if (topic == null) {
-            notFound()
-            return
+    def createTopic() {
+        render([success : topicService.createTopic(params,session) ? true:false] as JSON)
         }
 
-        try {
-            topicService.save(topic)
-        } catch (ValidationException e) {
-            respond topic.errors, view:'create'
-            return
-        }
+    def topicPage() {
 
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'topic.label', default: 'linksharing.Topic'), topic.id])
-                redirect topic
+        if (session.getAttribute("firstname")) {
+            Map model = topicService.topicPage(params,session,flash)
+            if(model) {
+                render(view: "topic", model: model)
+            }else{
+                //flash.error = "Sorry the Topic is Private"
+                redirect(controller: "user",action: "dashboard")
             }
-            '*' { respond topic, [status: CREATED] }
+        } else {
+            flash.error = "Please Login First"
+            redirect(controller: "user")
         }
     }
 
-    def edit(Long id) {
-        respond topicService.get(id)
+    def delete() {
+        render([success:topicService.delete(params)] as JSON)
     }
 
-    def update(Topic topic) {
-        if (topic == null) {
-            notFound()
-            return
-        }
-
-        try {
-            topicService.save(topic)
-        } catch (ValidationException e) {
-            respond topic.errors, view:'edit'
-            return
-        }
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.updated.message', args: [message(code: 'topic.label', default: 'linksharing.Topic'), topic.id])
-                redirect topic
-            }
-            '*'{ respond topic, [status: OK] }
-        }
+    def changeTopicSeriousness(){
+        render([success:topicService.changeTopicSeriousness(params,session)] as JSON)
     }
 
-    def delete(Long id) {
-        if (id == null) {
-            notFound()
-            return
-        }
-
-        topicService.delete(id)
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'topic.label', default: 'linksharing.Topic'), id])
-                redirect action:"index", method:"GET"
-            }
-            '*'{ render status: NO_CONTENT }
-        }
+    def changeTopicVisibility(){
+        render([success:topicService.changeTopicVisibility(params,session)] as JSON)
     }
 
-    protected void notFound() {
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.not.found.message', args: [message(code: 'topic.label', default: 'linksharing.Topic'), params.id])
-                redirect action: "index", method: "GET"
-            }
-            '*'{ render status: NOT_FOUND }
-        }
+    def changeTopicName() {
+        render([success:topicService.changeTopicName(params,session)] as JSON)
     }
 }

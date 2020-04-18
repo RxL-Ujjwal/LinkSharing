@@ -2,6 +2,6 @@ package linksharing
 
 class ResourceRating {
     Resource resource
-    User user
+    Users user
     Integer score
 }

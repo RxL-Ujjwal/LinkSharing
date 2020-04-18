@@ -2,15 +2,14 @@ package linksharing
 
 class Resource {
     String description
-    Date createdBy
+    Users createdBy
     Topic topic
     Date dateCreated
     Date lastUpdated
 
+    static hasMany = [readingItem:ReadingItem,resourceRating:ResourceRating]
 
-    static hasMany = [readingitem:ReadingItem,resourcerating:ResourceRating]
     static mapping = {
         table name:"Rsr"
-        tablePerHierarchy : false
     }
 }

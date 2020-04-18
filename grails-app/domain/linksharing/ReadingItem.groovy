@@ -2,7 +2,7 @@ package linksharing
 
 class ReadingItem {
     Resource resource
-    User user
+    Users user
     boolean isRead
 }
 

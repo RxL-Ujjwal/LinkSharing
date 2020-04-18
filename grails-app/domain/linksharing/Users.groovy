@@ -1,12 +1,12 @@
 package linksharing
 
-class User {
+class Users {
     String email
     String username
     String password
     String firstName
     String lastName
-    Byte photo
+    byte[] photo
     boolean admin
     boolean active
     Date dateCreated
